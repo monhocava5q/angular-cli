@@ -17,7 +17,7 @@
     <link rel="{{rel}}" {{#if sizes}}sizes="{{sizes}}" {{/if}}href="{{href}}">
   {{/each}}
 
-  {{#if environment.production}}
+<!--   {{#if environment.production}}
   <script type="text/javascript">
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/worker.js').catch(function(err) {
@@ -26,16 +26,28 @@
     }
   </script>
   {{/if}}
-  <% } %>
+  <% } %> -->
 </head>
 <body>
   <<%= htmlComponentName %>-app>Loading...</<%= htmlComponentName %>-app>
 
-  <% if (isMobile) { %>
+  <!--   <% if (isMobile) { %>
 
-    {{#if environment.production}}
-      <script src="/app-concat.js" async></script>
-    {{else}}
+      {{#if environment.production}}
+        <script src="/app-concat.js" async></script>
+      {{else}}
+        {{#each scripts.polyfills}}
+        <script src="{{.}}"></script>
+        {{/each}}
+        <script>
+          System.import('system-config.js').then(function () {
+            System.import('main');
+          }).catch(console.error.bind(console));
+        </script>
+      {{/if}}
+
+    <% } else { %>
+
       {{#each scripts.polyfills}}
       <script src="{{.}}"></script>
       {{/each}}
@@ -44,22 +56,8 @@
           System.import('main');
         }).catch(console.error.bind(console));
       </script>
-    {{/if}}
 
-  <% } else { %>
-
-    {{#each scripts.polyfills}}
-    <script src="{{.}}"></script>
-    {{/each}}
-    <script>
-      System.import('system-config.js').then(function () {
-        System.import('main');
-      }).catch(console.error.bind(console));
-    </script>
-
-  <% } %>
-
-
+    <% } %> -->
 
 </body>
 </html>

@@ -1,13 +1,13 @@
 const Command = require('ember-cli/lib/models/command');
 const win = require('ember-cli/lib/utilities/windows-admin');
-const path = require('path');
 
-const Build = require('../tasks/build');
-const BuildWatch = require('../tasks/build-watch');
+// const Build = require('../tasks/build');
+// const BuildWatch = require('../tasks/build-watch');
 
-
+// Webpack Configuration
 const webpack = require('webpack');
-
+const webpackConfig = require('../tasks/webpack-build-config');
+const webpackCompiler = webpack(webpackConfig);
 
 module.exports = Command.extend({
   name: 'build',
@@ -23,76 +23,19 @@ module.exports = Command.extend({
   ],
 
   run: function(commandOptions) {
-    // var BuildTask = this.taskFor(commandOptions);
-    // var buildTask = new BuildTask({
-    //   ui: this.ui,
-    //   analytics: this.analytics,
-    //   project: this.project
-    // });
-    // var ShowAssetSizesTask = this.tasks.ShowAssetSizes;
-    // var showTask = new ShowAssetSizesTask({
-    //   ui: this.ui
-    // });
-    //
-    // return win.checkWindowsElevation(this.ui).then(function () {
-    //   return buildTask.run(commandOptions)
-    //     .then(function () {
-    //       if (!commandOptions.suppressSizes && commandOptions.environment === 'production') {
-    //         return showTask.run({
-    //           outputPath: commandOptions.outputPath
-    //         });
-    //       }
-    //     });
-    // });
+    return new Promise((resolve, reject) => {
+      webpackCompiler.run((err, stats) => {
+        debugger;
+        if (err || stats.compilation.errors.length) {
+          reject(stats.compilation.errors);
+          console.log(err);
+        }
 
-
-  return new Promise((resolve) => {
-    webpack({
-      resolve: {
-        extensions: ['', '.css', '.scss', '.ts', '.js']
-      },
-
-      plugins: [
-        //   new LiveReloadPlugin({
-        //     appendScriptTag: true
-        //   })
-      ],
-
-      entry: path.resolve(process.cwd(), './src/main.ts'),
-      output: {
-        path: "./dist",
-        publicPath: 'dist/',
-        filename: "bundle.js"
-      },
-      ts: {
-        configFileName: './src/tsconfig.json'
-      },
-
-      // devtool: 'source-map',
-
-      module: {
-        loaders: [
-          {
-            test: /\.ts$/,
-            loader: 'ts-loader'
-          },
-          {
-            test: /\.css$/,
-            loader: 'style-loader'
-          }
-        ]
-      },
-
-      devServer: {
-        historyApiFallback: true
-      }
-    }, function (err, stats) {
-      resolve();
-      console.log(err);
-      console.log(stats);
-      console.log('--------');
+        resolve();
+        console.log(stats);
+        console.log('--------');
+      });
     });
-  });
   },
 
   taskFor: function(options) {

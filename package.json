@@ -45,6 +45,7 @@
     "fs-extra": "^0.30.0",
     "glob": "^7.0.3",
     "handlebars": "^4.0.5",
+    "json-loader": "^0.5.4",
     "leek": "0.0.21",
     "lodash": "^4.11.1",
     "opn": "4.0.1",
@@ -55,7 +56,7 @@
     "symlink-or-copy": "^1.0.3",
     "systemjs-builder": "0.15.17",
     "ts-loader": "^0.8.2",
-    "typescript": "^1.8.10",
+    "typescript": "^1.9.0-dev.20160605-1.0",
     "typings": "^0.8.1",
     "webpack": "^2.1.0-beta.8"
   },

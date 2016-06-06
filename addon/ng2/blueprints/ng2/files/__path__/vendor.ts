@@ -1,3 +1,6 @@
+// Typescript emit helpers polyfill
+import 'ts-helpers';
+
 import '@angular/core';
 import '@angular/common';
 import '@angular/compiler';

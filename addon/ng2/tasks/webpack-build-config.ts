@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
+
 // Resolve to the generated applications
 function ngAppResolve(resolvePath: string): string {
   return path.resolve(process.cwd(), resolvePath);
@@ -20,19 +21,40 @@ module.exports = {
   },
 
   output: {
-    path: "./dist",
-    filename: "[name].bundle.js"
+    path: './dist',
+    filename: '[name].bundle.js'
   },
 
   module: {
     loaders: [
       {
         test: /\.ts$/,
-        loader: 'ts-loader'
+        loaders: [
+          {
+            loader: 'awesome-typescript-loader',
+            query: {
+              useWebpackText: true,
+              tsconfig: ngAppResolve('./src/tsconfig.json'),
+              resolveGlobs: false
+            }
+          },
+          {
+            loader: 'angular2-template-loader'
+          }
+        ]
+        exclude: [/\.(spec|e2e)\.ts$/]
       },
       {
         test: /\.json$/,
         loader: 'json-loader'
+      },
+      {
+        test: /\.css$/,
+        loader: 'raw-loader'
+      },
+      {
+        test: /\.html$/,
+        loader: 'raw-loader'
       }
     ]
   },
@@ -46,21 +68,26 @@ module.exports = {
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: ['polyfills', 'vendor'].reverse()
+    }),
+    new webpack.LoaderOptionsPlugin({
+      minimize: true
+    }),
+    new webpack.LoaderOptionsPlugin({
+      test: /\.js$/,
+      jsfile: true
     })
   ],
 
-  ts: {
-    configFileName: ngAppResolve('./src/tsconfig.json'),
-    silent: true
-  },
+  // ts: {
+  //   configFileName: ngAppResolve('./src/tsconfig.json'),
+  //   silent: true
+  // },
 
   resolve: {
-    extensions: ['', '.css', '.scss', '.ts', '.js']
+    extensions: ['', '.ts', '.js'],
+    root: ngAppResolve('./src')
+    // modulesDirectories: ['node_modules']
   },
-
-  devServer: {
-    historyApiFallback: true
-  }
 
   node: {
     global: 'window',

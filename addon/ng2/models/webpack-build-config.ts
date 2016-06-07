@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const ClosureCompilerPlugin = require('webpack-closure-compiler');
 
 
 // Resolve to the generated applications
@@ -30,6 +31,14 @@ module.exports = {
       {
         test: /\.ts$/,
         loaders: [
+          {
+            loader: 'babel-loader',
+            query: {
+              presets: [
+                'babel-preset-es2015-webpack'
+              ].map(require.resolve)
+            }
+          }
           {
             loader: 'awesome-typescript-loader',
             query: {
@@ -75,6 +84,14 @@ module.exports = {
     new webpack.LoaderOptionsPlugin({
       test: /\.js$/,
       jsfile: true
+    })
+    new ClosureCompilerPlugin({
+      compiler: {
+        language_in: 'ECMASCRIPT5',
+        language_out: 'ECMASCRIPT5',
+        compilation_level: 'SIMPLE'
+      },
+      concurrency: 3,
     })
   ],
 

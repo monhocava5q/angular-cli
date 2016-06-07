@@ -4,25 +4,7 @@ const win = require('ember-cli/lib/utilities/windows-admin');
 // const Build = require('../tasks/build');
 // const BuildWatch = require('../tasks/build-watch');
 
-// Webpack Configuration
-const webpack = require('webpack');
-const webpackConfig = require('../tasks/webpack-build-config');
-const webpackCompiler = webpack(webpackConfig);
-const ProgressPlugin = require('webpack/lib/ProgressPlugin');
-const webpackOutputOptions = {
-  colors: true,
-  chunks: true,
-  modules: false,
-  reasons: false,
-  chunkModules: false
-}
-
-let lastHash = null;
-
-webpackCompiler.apply(new ProgressPlugin({
-  profile: true
-}));
-
+const Build = require('../tasks/build-webpack');
 
 module.exports = Command.extend({
   name: 'build',
@@ -38,34 +20,9 @@ module.exports = Command.extend({
   ],
 
   run: function(commandOptions) {
-    return new Promise((resolve, reject) => {
-      webpackCompiler.run((err, stats) => {
-        // Don't keep cache
-        // TODO: Make conditional if using --watch
-        webpackCompiler.purgeInputFileSystem();
+    let buildTask = new Build({options: commandOptions});
 
-        if(err) {
-          lastHash = null;
-          console.error(err.stack || err);
-          if(err.details) console.error(err.details);
-            reject(err.details);
-        }
-
-        if(stats.hash !== lastHash) {
-          lastHash = stats.hash;
-          process.stdout.write(stats.toString(webpackOutputOptions) + "\n");
-        }
-        resolve();
-      });
-    });
-  },
-
-  taskFor: function(options) {
-    if (options.watch) {
-      return BuildWatch;
-    } else {
-      return Build;
-    }
+    return buildTask.run();
   }
 });
 

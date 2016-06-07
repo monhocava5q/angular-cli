@@ -32,6 +32,9 @@
   "dependencies": {
     "angular2-template-loader": "^0.2.0",
     "awesome-typescript-loader": "^0.19.0",
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015-webpack": "^6.4.1",
     "broccoli": "^1.0.0-beta.7",
     "broccoli-caching-writer": "^2.2.1",
     "broccoli-concat": "^2.2.0",

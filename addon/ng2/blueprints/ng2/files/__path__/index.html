@@ -13,7 +13,16 @@
   {{#each mobile.icons}}
     <link rel="{{rel}}" {{#if sizes}}sizes="{{sizes}}" {{/if}}href="{{href}}">
   {{/each}}
-
+  {{#if environment.production}}
+  <script type="text/javascript">
+   if ('serviceWorker' in navigator) {
+     navigator.serviceWorker.register('/worker.js').catch(function(err) {
+       console.log('Error installing service worker: ', err);
+     });
+   }
+  </script>
+  {{/if}}
+  <% } %>
 </head>
 <body>
   <<%= htmlComponentName %>-app>Loading...</<%= htmlComponentName %>-app>

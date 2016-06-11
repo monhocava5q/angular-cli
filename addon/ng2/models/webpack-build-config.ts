@@ -9,9 +9,62 @@ function ngAppResolve(resolvePath: string): string {
   return path.resolve(process.cwd(), resolvePath);
 }
 
+let baseHtmlTemplateConfig = {
+  template: ngAppResolve('./src/index.html'),
+  chunksSortMode: 'dependency'
+};
+
+// These are the output
+export const webpackOutputOptions = {
+  colors: true,
+  chunks: true,
+  modules: false,
+  reasons: false,
+  chunkModules: false
+}
+
+export interface IWebpackDevServerConfigurationOptions {
+  contentBase?: string;
+  // or: contentBase: "http://localhost/",
+
+  hot?: boolean;
+  // Enable special support for Hot Module Replacement
+  // Page is no longer updated, but a "webpackHotUpdate" message is send to the content
+  // Use "webpack/hot/dev-server" as additional module in your entry point
+  // Note: this does _not_ add the `HotModuleReplacementPlugin` like the CLI option does.
+
+  // Set this as true if you want to access dev server from arbitrary url.
+  // This is handy if you are using a html5 router.
+  historyApiFallback?: boolean;
+
+  // Set this if you want to enable gzip compression for assets
+  compress?: boolean;
+
+  // Set this if you want webpack-dev-server to delegate a single path to an arbitrary server.
+  // Use "*" to proxy all paths to the specified server.
+  // This is useful if you want to get rid of 'http://localhost:8080/' in script[src],
+  // and has many other use cases (see https://github.com/webpack/webpack-dev-server/pull/127 ).
+  proxy?: {[key: string] : string};
+
+  // pass [static options](http://expressjs.com/en/4x/api.html#express.static) to inner express server
+  staticOptions?: any;
+  // webpack-dev-middleware options
+  quiet?: boolean;
+  noInfo?: boolean;
+  lazy?: boolean;
+  filename?: string;
+  watchOptions?: {
+    aggregateTimeout?: number;
+    poll?: number;
+  },
+  publicPath?: string;
+  headers?: { [key:string]: string };
+  stats?: { colors: boolean; };
+}
+
 // Webpack Configuration Object
 // Used in build.ts
-module.exports = {
+export const webpackCommonConfig = {
   cache: false,
   // Resolve loaders from the CLI node_modules rather than the projects
   context: path.resolve(__dirname, './'),
@@ -45,12 +98,15 @@ module.exports = {
               useWebpackText: true,
               tsconfig: ngAppResolve('./src/tsconfig.json'),
               resolveGlobs: false
+              // module: "es6",
+              // target: "es5",
+              // lib: ["es6", "dom"]
             }
           },
           {
             loader: 'angular2-template-loader'
           }
-        ]
+        ],
         exclude: [/\.(spec|e2e)\.ts$/]
       },
       {
@@ -67,45 +123,14 @@ module.exports = {
       }
     ]
   },
-
   plugins: [
-    // Automatically manages the addition of bundle scripts to your index.html template.
-    // Also allows index.html to be used in src/ and watched
-    new HtmlWebpackPlugin({
-      template: ngAppResolve('./src/index.html'),
-      chunksSortMode: 'dependency'
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['polyfills', 'vendor'].reverse()
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    }),
-    new webpack.LoaderOptionsPlugin({
-      test: /\.js$/,
-      jsfile: true
-    })
-    new ClosureCompilerPlugin({
-      compiler: {
-        language_in: 'ECMASCRIPT5',
-        language_out: 'ECMASCRIPT5',
-        compilation_level: 'SIMPLE'
-      },
-      concurrency: 3,
-    })
+    new HtmlWebpackPlugin(baseHtmlTemplateConfig)
   ],
-
-  // ts: {
-  //   configFileName: ngAppResolve('./src/tsconfig.json'),
-  //   silent: true
-  // },
-
   resolve: {
     extensions: ['', '.ts', '.js'],
     root: ngAppResolve('./src')
     // modulesDirectories: ['node_modules']
   },
-
   node: {
     global: 'window',
     crypto: 'empty',

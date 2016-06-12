@@ -11,6 +11,23 @@ PortFinder.basePort = 49152;
 const getPort = Promise.denodeify(PortFinder.getPort);
 const defaultPort = process.env.PORT || 4200;
 
+export interface IServeTaskOptions {
+  port?: number;
+  host?: string;
+  proxy?: string;
+  insecureProxy?: boolean;
+  watcher?: string;
+  liveReload?: boolean;
+  liveReloadHost?: string;
+  liveReloadPort?: number;
+  liveReloadBaseUrl?: string;
+  liveReloadLiveCss?: boolean;
+  environment?: string;
+  outputPath?: string;
+  ssl?: boolean;
+  sslKey?: string;
+  sslCert?: string;
+}
 
 module.exports = Command.extend({
   name: 'serve',
@@ -35,12 +52,12 @@ module.exports = Command.extend({
     { name: 'ssl-cert',             type: String,  default: 'ssl/server.crt' }
   ],
 
-  run: function(commandOptions) {
+  run: function(commandOptions: IServeTaskOptions) {
     commandOptions.liveReloadHost = commandOptions.liveReloadHost || commandOptions.host;
 
     return this._checkExpressPort(commandOptions)
       .then(this._autoFindLiveReloadPort.bind(this))
-      .then(function(commandOptions) {
+      .then(function(commandOptions: IServeTaskOptions) {
         commandOptions = assign({}, commandOptions, {
           baseURL: this.project.config(commandOptions.environment).baseURL || '/'
         });
@@ -53,11 +70,13 @@ module.exports = Command.extend({
           }
         }
 
-        var ServeTask = require('../tasks/serve');
-        var serve = new ServeTask({
+        const ServeWebpackTask = (require('../tasks/serve-webpack.ts'))
+        // var ServeTask = require('../tasks/serve');
+
+        var serve = new ServeWebpackTask({
           ui: this.ui,
           analytics: this.analytics,
-          project: this.project
+          project: this.project,
         });
 
         return win.checkWindowsElevation(this.ui).then(function() {
@@ -66,9 +85,9 @@ module.exports = Command.extend({
       }.bind(this));
   },
 
-  _checkExpressPort: function(commandOptions) {
+  _checkExpressPort: function(commandOptions: IServeTaskOptions) {
     return getPort({ port: commandOptions.port, host: commandOptions.host })
-      .then(function(foundPort) {
+      .then(function(foundPort: number) {
 
         if (commandOptions.port !== foundPort && commandOptions.port !== 0) {
           var message = 'Port ' + commandOptions.port + ' is already in use.';
@@ -82,9 +101,9 @@ module.exports = Command.extend({
       }.bind(this));
   },
 
-  _autoFindLiveReloadPort: function(commandOptions) {
+  _autoFindLiveReloadPort: function(commandOptions: IServeTaskOptions) {
     return getPort({ port: commandOptions.liveReloadPort, host: commandOptions.liveReloadHost })
-      .then(function(foundPort) {
+      .then(function(foundPort: number) {
 
         // if live reload port matches express port, try one higher
         if (foundPort === commandOptions.port) {

@@ -1,4 +1,5 @@
-import {webpackCommonConfig, webpackOutputOptions} from '../models/webpack-build-config.ts';
+import {webpackCommonConfig, webpackOutputOptions} from '../models/webpack-build-config';
+import {IServeTaskOptions} from '../commands/serve';
 
 const Task            = require('ember-cli/lib/models/task');
 const webpack         = require('webpack');
@@ -13,7 +14,7 @@ let lastHash = null;
 
 module.exports = Task.extend({
   run: () => {
-    let commandOptions = this.options;
+    let commandOptions: IServeTaskOptions = this.options;
 
     return new Promise( (resolve, reject) => {
       webpackCompiler.watch({}, (err, stats) => {

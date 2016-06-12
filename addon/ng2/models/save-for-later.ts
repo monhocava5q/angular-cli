@@ -1,6 +1,4 @@
-// new webpack.optimize.CommonsChunkPlugin({
-//   name: ['polyfills', 'vendor'].reverse()
-// }),
+
 // new webpack.LoaderOptionsPlugin({
 //   minimize: true
 // }),

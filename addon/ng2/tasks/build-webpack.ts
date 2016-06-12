@@ -1,4 +1,4 @@
-import {webpackCommonConfig, webpackOutputOptions} from '../models/webpack-build-config.ts';
+import {webpackCommonConfig, webpackOutputOptions} from '../models/webpack-build-config';
 
 // Configure build and output;
 const Task            = require('ember-cli/lib/models/task');

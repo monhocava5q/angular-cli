@@ -59,6 +59,7 @@ export const webpackCommonConfig = {
     path: ngAppResolve('./dist'),
     filename: '[name].bundle.js'
   },
+  devtool: "sourcemap",
   module: {
     loaders: [
       {
@@ -76,11 +77,11 @@ export const webpackCommonConfig = {
             loader: 'awesome-typescript-loader',
             query: {
               useWebpackText: true,
+              library: "es6",
               tsconfig: ngAppResolve('./src/tsconfig.json'),
               resolveGlobs: false,
               module: "es2015",
-              target: "es5",
-              lib: ["es2015", "dom"]
+              target: "es5"
             }
           },
           {
@@ -96,6 +97,18 @@ export const webpackCommonConfig = {
       {
         test: /\.css$/,
         loader: 'raw-loader'
+      },
+      {
+        test:/\.styl$/,
+        loaders: ['raw-loader', 'stylus-loader']
+      },
+      {
+        test:/\.less$/,
+        loaders: ['raw-loader', 'less-loader']
+      },
+      {
+        test:/\.scss$/,
+        loaders: ['raw-loader', 'sass-loader']
       },
       {
         test: /\.html$/,

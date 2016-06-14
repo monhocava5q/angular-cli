@@ -59,7 +59,6 @@ export const webpackCommonConfig = {
     path: ngAppResolve('./dist'),
     filename: '[name].bundle.js'
   },
-
   module: {
     loaders: [
       {
@@ -79,9 +78,9 @@ export const webpackCommonConfig = {
               useWebpackText: true,
               tsconfig: ngAppResolve('./src/tsconfig.json'),
               resolveGlobs: false,
-              module: "es6",
+              module: "es2015",
               target: "es5",
-              lib: ["es6", "dom"]
+              lib: ["es2015", "dom"]
             }
           },
           {

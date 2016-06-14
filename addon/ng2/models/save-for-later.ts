@@ -22,3 +22,27 @@
 //   configFileName: ngAppResolve('./src/tsconfig.json'),
 //   silent: true
 // },
+// output: {
+//   path: './dist/',
+//   filename: '[name].[chunkhash].js',
+//   sourceMapFilename: '[name].[chunkhash].map',
+//   chunkFilename: '[chunkhash].js'
+// },
+// recordsPath: path.join(__dirname, "records.json"),
+//
+//
+//
+//
+// new webpack.optimize.CommonsChunkPlugin({
+//   names: ['main', 'vendors', 'polyfills']
+// }),
+// new webpack.optimize.CommonsChunkPlugin({
+//   minChunks: Infinity,
+//   name: 'inline',
+//   filename: 'inline.js',
+//   sourceMapFilename: 'inline.map'
+// }),
+// new HtmlWebpackPlugin({
+//   template:'./src/index.html',
+//   chunksSortMode: "dependency"
+// })

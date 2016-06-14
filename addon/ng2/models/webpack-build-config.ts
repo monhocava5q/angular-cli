@@ -55,7 +55,6 @@ export const webpackCommonConfig = {
     vendor: ngAppResolve('./src/vendor.ts'),
     polyfills: ngAppResolve('./src/polyfills.ts')
   },
-
   output: {
     path: ngAppResolve('./dist'),
     filename: '[name].bundle.js'
@@ -79,10 +78,10 @@ export const webpackCommonConfig = {
             query: {
               useWebpackText: true,
               tsconfig: ngAppResolve('./src/tsconfig.json'),
-              resolveGlobs: false
-              // module: "es6",
-              // target: "es5",
-              // lib: ["es6", "dom"]
+              resolveGlobs: false,
+              module: "es6",
+              target: "es5",
+              lib: ["es6", "dom"]
             }
           },
           {

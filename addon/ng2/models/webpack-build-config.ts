@@ -2,6 +2,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const ClosureCompilerPlugin = require('webpack-closure-compiler');
+// const autoprefixer = require('autoprefixer');
 
 
 // Resolve to the generated applications
@@ -59,7 +60,7 @@ export const webpackCommonConfig = {
     path: ngAppResolve('./dist'),
     filename: '[name].bundle.js'
   },
-  devtool: "sourcemap",
+  devtool: 'cheap-module-source-map',
   module: {
     loaders: [
       {
@@ -96,19 +97,19 @@ export const webpackCommonConfig = {
       },
       {
         test: /\.css$/,
-        loader: 'raw-loader'
+        loaders: ['raw-loader', 'postcss-loader']
       },
       {
         test:/\.styl$/,
-        loaders: ['raw-loader', 'stylus-loader']
+        loaders: ['raw-loader', 'postcss-loader', 'stylus-loader?sourceMap']
       },
       {
         test:/\.less$/,
-        loaders: ['raw-loader', 'less-loader']
+        loaders: ['raw-loader', 'postcss-loader', 'less-loader?sourceMap']
       },
       {
         test:/\.scss$/,
-        loaders: ['raw-loader', 'sass-loader']
+        loaders: ['raw-loader', 'postcss-loader', 'sass-loader?sourceMap']
       },
       {
         test: /\.html$/,

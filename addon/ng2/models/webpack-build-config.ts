@@ -2,7 +2,8 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 const ClosureCompilerPlugin = require('webpack-closure-compiler');
-// const autoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
 
 
 // Resolve to the generated applications
@@ -67,18 +68,17 @@ export const webpackCommonConfig = {
         test: /\.ts$/,
         loaders: [
           {
-            loader: 'babel-loader',
+            loader: 'babel-loader', //TODO: Remove Babel once support for lib: for typescript@next
             query: {
               presets: [
                 'babel-preset-es2015-webpack'
               ].map(require.resolve)
             }
-          }
+          },
           {
             loader: 'awesome-typescript-loader',
             query: {
               useWebpackText: true,
-              library: "es6",
               tsconfig: ngAppResolve('./src/tsconfig.json'),
               resolveGlobs: false,
               module: "es2015",
@@ -95,6 +95,12 @@ export const webpackCommonConfig = {
         test: /\.json$/,
         loader: 'json-loader'
       },
+      // TODO: https://github.com/webpack/css-loader#sourcemaps
+      // Style sourcemaps create a runtime and bundle overhead.
+      // Do we want this?
+
+      // We pass sourcemap flag (on external builds [not from my dev] this will not work because of)
+      // https://github.com/webpack/raw-loader/pull/8
       {
         test: /\.css$/,
         loaders: ['raw-loader', 'postcss-loader']
@@ -111,11 +117,33 @@ export const webpackCommonConfig = {
         test:/\.scss$/,
         loaders: ['raw-loader', 'postcss-loader', 'sass-loader?sourceMap']
       },
+      // Asset loaders
+      //
+      {
+        test: /\.(jpg|png)$/,
+        loader: 'url-loader?limit=25000', // Only inline for sizes <= 25000
+        include: PATHS.images
+      },
+      {
+        test: /\.(jpg|png)$/,
+        loader: 'file-loader?name=[path][name].[hash].[ext]',
+        include: PATHS.images
+      },
+      {
+        test: /\.svg$/,
+        loader: 'file-loader',
+        include: PATHS.images
+      }
       {
         test: /\.html$/,
         loader: 'raw-loader'
       }
     ]
+  },
+  postcss: () => {
+      return {
+        defaults: [cssnano, autoprefixer]
+      };
   },
   plugins: [
     new webpack.optimize.CommonsChunkPlugin({

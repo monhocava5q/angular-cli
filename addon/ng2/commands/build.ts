@@ -7,7 +7,7 @@ const win = require('ember-cli/lib/utilities/windows-admin');
 const WebpackBuild = require('../tasks/build-webpack');
 const WebpackBuildWatch = require('../tasks/build-webpack-watch');
 
-interface IBuildOptions {
+interface BuildOptions {
   environment?: string;
   outputPath?: string;
   watch?: boolean;
@@ -25,10 +25,13 @@ module.exports = Command.extend({
     { name: 'output-path',    type: 'Path',  default: 'dist/',       aliases: ['o'] },
     { name: 'watch',          type: Boolean, default: false,         aliases: ['w'] },
     { name: 'watcher',        type: String },
-    { name: 'suppress-sizes', type: Boolean, default: false }
+    { name: 'suppress-sizes', type: Boolean, default: false },
+
+    // Experimental webpack build for material team
+    { name: 'm2', type: Boolean, default: false}
   ],
 
-  run: function(commandOptions: IBuildOptions) {
+  run: function(commandOptions: BuildOptions) {
     let buildTask = commandOptions.watch ? new WebpackBuildWatch({options: commandOptions}) : new WebpackBuild({options: commandOptions});
 
     return buildTask.run();

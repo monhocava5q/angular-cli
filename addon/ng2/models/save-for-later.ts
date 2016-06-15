@@ -46,3 +46,37 @@
 //   template:'./src/index.html',
 //   chunksSortMode: "dependency"
 // })
+//
+//
+// export const materialEntryConfig: {[key: string]: any} = {
+//   demoMain: [ngAppResolve('./src/demo-app/main.ts')],
+//   e2eMain: [ngAppResolve('./src/e2e-app/main.ts')],
+//   core: [ngAppResolve('./src/core/core.ts')],
+//   vendor: [
+//     "@angular/common",
+//     "@angular/compiler",
+//     "@angular/core",
+//     "@angular/http",
+//     "@angular/platform-browser",
+//     "@angular/platform-browser-dynamic",
+//     "@angular/router",
+//   ],
+//   polyfills: [
+//     "core-js",
+//     "hammerjs",
+//     "rxjs",
+//     "systemjs",
+//     "zone.js"
+//   ]
+// }
+
+// export const materialPluginsConfig: any[] = [
+//     new webpack.optimize.CommonsChunkPlugin({
+//       name: ['polyfills', 'vendor'].reverse()
+//     }),
+//     new HtmlWebpackPlugin({
+//       template: ngAppResolve('./demo-app/index.html'),
+//       chunksSortMode: 'dependency'
+//     })
+// ];
+

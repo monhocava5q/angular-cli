@@ -1,10 +1,11 @@
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
-
+const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 
 // Resolve to the generated applications
 function ngAppResolve(resolvePath: string): string {
@@ -67,14 +68,14 @@ export const webpackCommonConfig = {
       {
         test: /\.ts$/,
         loaders: [
-          {
-            loader: 'babel-loader', //TODO: Remove Babel once support for lib: for typescript@next
-            query: {
-              presets: [
-                'babel-preset-es2015-webpack'
-              ].map(require.resolve)
-            }
-          },
+          // {
+          //   loader: 'babel-loader', //TODO: Remove Babel once support for lib: for typescript@next
+          //   query: {
+          //     presets: [
+          //       'babel-preset-es2015-webpack'
+          //     ].map(require.resolve)
+          //   }
+          // },
           {
             loader: 'awesome-typescript-loader',
             query: {
@@ -82,7 +83,9 @@ export const webpackCommonConfig = {
               tsconfig: ngAppResolve('./src/tsconfig.json'),
               resolveGlobs: false,
               module: "es2015",
-              target: "es5"
+              target: "es5",
+              library: 'es6',
+              useForkChecker: true
             }
           },
           {
@@ -95,44 +98,38 @@ export const webpackCommonConfig = {
         test: /\.json$/,
         loader: 'json-loader'
       },
-      // TODO: https://github.com/webpack/css-loader#sourcemaps
-      // Style sourcemaps create a runtime and bundle overhead.
-      // Do we want this?
-
-      // We pass sourcemap flag (on external builds [not from my dev] this will not work because of)
-      // https://github.com/webpack/raw-loader/pull/8
       {
         test: /\.css$/,
         loaders: ['raw-loader', 'postcss-loader']
       },
       {
         test:/\.styl$/,
-        loaders: ['raw-loader', 'postcss-loader', 'stylus-loader?sourceMap']
+        loaders: ['raw-loader', 'postcss-loader', 'stylus-loader']
       },
       {
         test:/\.less$/,
-        loaders: ['raw-loader', 'postcss-loader', 'less-loader?sourceMap']
+        loaders: ['raw-loader', 'postcss-loader', 'less-loader']
       },
       {
         test:/\.scss$/,
-        loaders: ['raw-loader', 'postcss-loader', 'sass-loader?sourceMap']
+        loaders: ['raw-loader', 'postcss-loader', 'sass-loader']
       },
+      //
       // Asset loaders
       //
       {
         test: /\.(jpg|png)$/,
         loader: 'url-loader?limit=25000', // Only inline for sizes <= 25000
-        include: PATHS.images
       },
       {
         test: /\.(jpg|png)$/,
         loader: 'file-loader?name=[path][name].[hash].[ext]',
-        include: PATHS.images
+        include: ngAppResolve('./public')
       },
       {
         test: /\.svg$/,
         loader: 'file-loader',
-        include: PATHS.images
+        include: ngAppResolve('./public')
       }
       {
         test: /\.html$/,
@@ -142,25 +139,20 @@ export const webpackCommonConfig = {
   },
   postcss: () => {
       return {
-        defaults: [cssnano, autoprefixer]
+        defaults: [autoprefixer]
       };
   },
   plugins: [
+    new ForkCheckerPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: ['polyfills', 'vendor'].reverse()
     }),
-    new HtmlWebpackPlugin(baseHtmlTemplateConfig)
+    new HtmlWebpackPlugin(baseHtmlTemplateConfig),
+    new CopyWebpackPlugin([{from: ngAppResolve('./public'), to: ngAppResolve('./dist/public')}])
   ],
   resolve: {
     extensions: ['', '.ts', '.js'],
     root: ngAppResolve('./src')
     // modulesDirectories: ['node_modules']
-  },
-  node: {
-    global: 'window',
-    crypto: 'empty',
-    module: false,
-    clearImmediate: false,
-    setImmediate: false
   }
 };

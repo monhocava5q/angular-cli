@@ -6,6 +6,7 @@ const ClosureCompilerPlugin = require('webpack-closure-compiler');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
+const webpackMerge = require('webpack-merge');
 
 // Resolve to the generated applications
 function ngAppResolve(resolvePath: string): string {
@@ -18,7 +19,7 @@ let baseHtmlTemplateConfig = {
 };
 
 // These are the output
-export const webpackOutputOptions = {
+export const webpackOutputOptions: WebpackProgressPluginOutputOptions = {
   colors: true,
   chunks: true,
   modules: false,
@@ -26,26 +27,69 @@ export const webpackOutputOptions = {
   chunkModules: false
 }
 
-export interface IWebpackDevServerConfigurationOptions {
-  contentBase?: string;
-  hot?: boolean;
-  historyApiFallback?: boolean;
-  compress?: boolean;
-  proxy?: {[key: string] : string};
-  staticOptions?: any;
-  quiet?: boolean;
-  noInfo?: boolean;
-  lazy?: boolean;
-  filename?: string;
-  watchOptions?: {
-    aggregateTimeout?: number;
-    poll?: number;
+const webpackTestPartial = {
+  module: {
+    plugins: [
+      new ForkCheckerPlugin(),
+      new HtmlWebpackPlugin(baseHtmlTemplateConfig),
+    ],
+    preLoaders: [
+      {
+        test: /\.ts$/,
+        loader: 'tslint-loader',
+        exclude: ['node_modules']
+      },
+      {
+        test: /\.js$/,
+        loader: 'source-map-loader',
+        exclude: [
+        // these packages have problems with their sourcemaps
+        ngAppResolve('node_modules/rxjs'),
+        ngAppResolve('node_modules/@angular')
+      ]}
+    ],
+    loaders: [
+      {
+        test: /\.ts$/,
+        loaders: [
+          {
+            loader: 'awesome-typescript-loader',
+            query: {
+              useWebpackText: true,
+              tsconfig: ngAppResolve('./src/tsconfig.json'),
+              resolveGlobs: false,
+              module: "es2015",
+              target: "es5",
+              library: 'es6',
+              useForkChecker: true,
+              removeComments: true
+            }
+          },
+          {
+            loader: 'angular2-template-loader'
+          }
+        ],
+        exclude: [/\.(spec|e2e)\.ts$/]
+      },
+      { test: /\.json$/, loader: 'json-loader', exclude: [ngAppResolve('src/index.html')] },
+      { test: /\.css$/, loader: 'raw-loader', exclude: [ngAppResolve('src/index.html')] },
+      { test: /\.html$/, loader: 'raw-loader', exclude: [ngAppResolve('src/index.html')] }
+    ]
   },
-  publicPath?: string;
-  headers?: { [key:string]: string };
-  stats?: { colors: boolean; };
-  inline: boolean;
-}
+  tslint: {
+    emitErrors: false,
+    failOnHint: false,
+    resourcePath: 'src'
+  },
+  node: {
+    global: 'window',
+    process: false,
+    crypto: 'empty',
+    module: false,
+    clearImmediate: false,
+    setImmediate: false
+  }
+};
 
 // Webpack Configuration Object
 // Used in build.ts
@@ -62,20 +106,12 @@ export const webpackCommonConfig = {
     path: ngAppResolve('./dist'),
     filename: '[name].bundle.js'
   },
-  devtool: 'cheap-module-source-map',
+  devtool: 'sourcemap',
   module: {
     loaders: [
       {
         test: /\.ts$/,
         loaders: [
-          // {
-          //   loader: 'babel-loader', //TODO: Remove Babel once support for lib: for typescript@next
-          //   query: {
-          //     presets: [
-          //       'babel-preset-es2015-webpack'
-          //     ].map(require.resolve)
-          //   }
-          // },
           {
             loader: 'awesome-typescript-loader',
             query: {
@@ -94,37 +130,13 @@ export const webpackCommonConfig = {
         ],
         exclude: [/\.(spec|e2e)\.ts$/]
       },
-      {
-        test: /\.json$/,
-        loader: 'json-loader'
-      },
-      {
-        test: /\.css$/,
-        loaders: ['raw-loader', 'postcss-loader']
-      },
-      {
-        test:/\.styl$/,
-        loaders: ['raw-loader', 'postcss-loader', 'stylus-loader']
-      },
-      {
-        test:/\.less$/,
-        loaders: ['raw-loader', 'postcss-loader', 'less-loader']
-      },
-      {
-        test:/\.scss$/,
-        loaders: ['raw-loader', 'postcss-loader', 'sass-loader']
-      },
-      //
-      // Asset loaders
-      //
-      {
-        test: /\.(jpg|png)$/,
-        loader: 'url-loader?limit=25000', // Only inline for sizes <= 25000
-      },
-      {
-        test: /\.html$/,
-        loader: 'raw-loader'
-      }
+      { test: /\.json$/, loader: 'json-loader'},
+      { test: /\.css$/,  loaders: ['raw-loader', 'postcss-loader'] },
+      { test: /\.styl$/, loaders: ['raw-loader', 'postcss-loader', 'stylus-loader'] },
+      { test: /\.less$/, loaders: ['raw-loader', 'postcss-loader', 'less-loader'] },
+      { test: /\.scss$/, loaders: ['raw-loader', 'postcss-loader', 'sass-loader'] },
+      { test: /\.(jpg|png)$/, loader: 'url-loader?limit=128000'},
+      { test: /\.html$/, loader: 'raw-loader' }
     ]
   },
   postcss: () => {
@@ -134,15 +146,24 @@ export const webpackCommonConfig = {
   },
   plugins: [
     new ForkCheckerPlugin(),
+    new HtmlWebpackPlugin(baseHtmlTemplateConfig),
     new webpack.optimize.CommonsChunkPlugin({
       name: ['polyfills', 'vendor'].reverse()
     }),
-    new HtmlWebpackPlugin(baseHtmlTemplateConfig),
     new CopyWebpackPlugin([{from: ngAppResolve('./public'), to: ngAppResolve('./dist/public')}])
   ],
   resolve: {
     extensions: ['', '.ts', '.js'],
     root: ngAppResolve('./src')
-    // modulesDirectories: ['node_modules']
   }
 };
+
+export const webpackTestConfig = webpackMerge(webpackTestPartial, webpackCommonConfig);
+
+
+
+
+
+
+
+

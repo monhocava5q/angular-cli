@@ -122,16 +122,6 @@ export const webpackCommonConfig = {
         loader: 'url-loader?limit=25000', // Only inline for sizes <= 25000
       },
       {
-        test: /\.(jpg|png)$/,
-        loader: 'file-loader?name=[path][name].[hash].[ext]',
-        include: ngAppResolve('./public')
-      },
-      {
-        test: /\.svg$/,
-        loader: 'file-loader',
-        include: ngAppResolve('./public')
-      }
-      {
         test: /\.html$/,
         loader: 'raw-loader'
       }

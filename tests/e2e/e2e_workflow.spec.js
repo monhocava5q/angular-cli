@@ -66,10 +66,10 @@ describe('Basic end-to-end Workflow', function () {
     // stuck to the first build done
     sh.exec(`${ngBin} build -prod`);
     expect(existsSync(path.join(process.cwd(), 'dist'))).to.be.equal(true);
-    var appBundlePath = path.join(process.cwd(), 'dist', 'app', 'index.js');
-    var appBundleContent = fs.readFileSync(appBundlePath, { encoding: 'utf8' });
+    var mainBundlePath = path.join(process.cwd(), 'dist', 'main.js');
+    var mainBundleContent = fs.readFileSync(mainBundlePath, { encoding: 'utf8' });
     // production: true minimized turns into production:!0
-    expect(appBundleContent).to.include('production:!0');
+    expect(mainBundleContent).to.include('production:!0');
     // Also does not create new things in GIT.
     expect(sh.exec('git status --porcelain').output).to.be.equal(undefined);
   });
@@ -112,6 +112,25 @@ describe('Basic end-to-end Workflow', function () {
       const exitCode = typeof result === 'object' ? result.exitCode : result;
       expect(exitCode).to.be.equal(0);
     });
+  });
+
+  it('ng e2e fails with error exit code', function () {
+    this.timeout(240000);
+
+    function executor(resolve, reject) {
+      child_process.exec(`${ngBin} e2e`, (error, stdout, stderr) => {
+        if (error !== null) {
+          resolve(stderr);
+        } else {
+          reject(stdout);
+        }
+      });
+    }
+
+    return new Promise(executor)
+      .catch((msg) => {
+        throw new Error(msg);
+      });
   });
 
   it('Serve and run e2e tests after initial build', function () {
@@ -213,7 +232,7 @@ describe('Basic end-to-end Workflow', function () {
     });
   });
 
-  it('Can create a test route using `ng generate route test-route`', function () {
+  xit('Can create a test route using `ng generate route test-route`', function () {
     return ng(['generate', 'route', 'test-route']).then(function () {
       var routeDir = path.join(process.cwd(), 'src', 'app', '+test-route');
       expect(existsSync(routeDir)).to.be.equal(true);
@@ -221,7 +240,7 @@ describe('Basic end-to-end Workflow', function () {
     });
   });
 
-  it('Perform `ng test` after adding a route', function () {
+  xit('Perform `ng test` after adding a route', function () {
     this.timeout(420000);
 
     return ng(testArgs).then(function (result) {
@@ -415,7 +434,7 @@ describe('Basic end-to-end Workflow', function () {
         expect('build failed where it should have succeeded').to.equal('');
       });
   });
-  
+
   it('Serve and run e2e tests after all other commands', function () {
     this.timeout(240000);
 

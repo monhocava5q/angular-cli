@@ -31,6 +31,7 @@
   "homepage": "https://github.com/angular/angular-cli",
   "dependencies": {
     "@angular/compiler-cli": "^0.2.0",
+    "@types/webpack": "^1.12.22-alpha",
     "angular2-template-loader": "^0.4.0",
     "awesome-typescript-loader": "^1.0.0",
     "babel-core": "^6.9.1",
@@ -89,12 +90,13 @@
     "tslint": "^3.11.0",
     "tslint-loader": "^2.1.4",
     "typedoc": "^0.4.2",
-    "typescript": "^1.9.0-dev.20160615-1.0",
+    "typescript": "^1.9.0-dev.20160616-1.0",
     "typings": "^0.8.1",
     "url-loader": "^0.5.7",
     "webpack": "2.1.0-beta.13",
     "webpack-closure-compiler": "^2.0.2",
     "webpack-dev-server": "^1.14.1",
+    "webpack-md5-hash": "0.0.5",
     "webpack-merge": "^0.14.0"
   },
   "ember-addon": {

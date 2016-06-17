@@ -1,15 +1,8 @@
-import {webpackCommonConfig, webpackOutputOptions} from '../models/webpack-build-config';
+import {webpackOutputOptions, webpackDevConfig, webpackProdConfig} from '../models/';
 
 // Configure build and output;
 const Task            = require('ember-cli/lib/models/task');
 const webpack         = require('webpack');
-const webpackCompiler = webpack(webpackCommonConfig);
-const ProgressPlugin  = require('webpack/lib/ProgressPlugin');
-
-webpackCompiler.apply(new ProgressPlugin({
-  profile: true
-}));
-
 
 let lastHash = null;
 
@@ -17,6 +10,13 @@ module.exports = Task.extend({
   // Options: String outputPath
   run: () => {
     let commandOptions = this.options;
+
+    const webpackCompiler = webpack(webpackProdConfig);
+    const ProgressPlugin  = require('webpack/lib/ProgressPlugin');
+
+    webpackCompiler.apply(new ProgressPlugin({
+      profile: true
+    }));
 
     return new Promise((resolve, reject) => {
       webpackCompiler.run((err, stats) => {

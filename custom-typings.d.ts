@@ -26,3 +26,6 @@ interface WebpackProgressPluginOutputOptions {
   reasons?: boolean;
   chunkModules?: boolean;
 }
+
+declare var HtmlWebpackPlugin: any;
+declare var LoaderOptionsPlugin: any;

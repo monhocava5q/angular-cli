@@ -4,8 +4,10 @@
 var Promise = require('ember-cli/lib/ext/promise');
 var Task = require('ember-cli/lib/models/task');
 var path = require('path');
-var webpackTestConfig = require('../models/webpack-build-config').webpackTestConfig
+var ngAppResolve = require('../models').ngAppResolve;
+var webpackTestConfig = require('../models').webpackTestConfig;
 
+console.log("WEBPACK TEST CONFIG PLEASE VERIFY", webpackTestConfig);
 
 // require dependencies within the target project
 function requireDependency(root, moduleName) {
@@ -19,7 +21,7 @@ module.exports = Task.extend({
   run: function (options) {
     var projectRoot = this.project.root;
     return new Promise((resolve) => {
-
+      var webpack = require('webpack');
       var karma = requireDependency(projectRoot, 'karma');
       var karmaConfig = path.join(projectRoot, this.project.ngConfig.test.karma.config);
 
@@ -33,7 +35,8 @@ module.exports = Task.extend({
         require("karma-phantomjs-launcher")
       ];
 
-      options.preprocessors = { './config/spec-bundle.js': ['coverage','webpack', 'sourcemap'] }
+      options.files = [{ pattern: './config/spec-bundle.js', watched: false }];
+      options.preprocessors = { './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'] };
       options.webpack = webpackTestConfig;
       options.webpackServer = { noInfo: true};
 

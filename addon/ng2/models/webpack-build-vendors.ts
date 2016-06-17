@@ -14,29 +14,29 @@ export const webpackVendorDLLConfig = {
         library: "[name]"
     },
     module: {
-            loaders: [
-      {
-        test: /\.ts$/,
         loaders: [
           {
-            loader: 'awesome-typescript-loader',
-            query: {
-              useWebpackText: true,
-              tsconfig: ngAppResolve('./src/tsconfig.json'),
-              resolveGlobs: false,
-              module: "es2015",
-              target: "es5",
-              library: 'es6',
-              useForkChecker: true
-            }
-          },
-          {
-            loader: 'angular2-template-loader'
-          }
-        ],
-        exclude: [/\.(spec|e2e)\.ts$/]
-      }]
-    }
+            test: /\.ts$/,
+            loaders: [
+              {
+                loader: 'awesome-typescript-loader',
+                query: {
+                  useWebpackText: true,
+                  tsconfig: ngAppResolve('./src/tsconfig.json'),
+                  resolveGlobs: false,
+                  module: "es2015",
+                  target: "es5",
+                  library: 'es6',
+                  useForkChecker: true
+                }
+              },
+              {
+                loader: 'angular2-template-loader'
+              }
+            ],
+            exclude: [/\.(spec|e2e)\.ts$/]
+          }]
+        }
     plugins: [
         new webpack.LoaderOptionsPlugin({
           test: /\.js/,
@@ -56,4 +56,3 @@ export const webpackVendorDLLConfig = {
         modulesDirectories: ["node_modules"]
     }
 }
-.ts

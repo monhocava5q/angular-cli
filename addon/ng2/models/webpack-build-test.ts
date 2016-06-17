@@ -1,20 +1,20 @@
 import * as webpack from 'webpack';
 import {ngAppResolve} from './webpack-build-utils';
 
+const path = require('path');
+
 export const webpackTestConfig = {
-  context: ngAppResolve('./'),
   devtool: 'inline-source-map',
+  context: path.resolve(__dirname, './'),
   resolve: {
     extensions: ['', '.ts', '.js'],
-    root: ngAppResolve('./src'),
+    root: ngAppResolve('./src')
   },
   entry: {
-    main: [ngAppResolve('./src/main.ts')],
-    vendor: ngAppResolve('./src/vendor.ts'),
-    polyfills: ngAppResolve('./src/polyfills.ts')
+    test: ngAppResolve('./src/test.ts')
   },
   output: {
-    path: ngAppResolve('./dist'),
+    path: './dist.test',
     filename: '[name].bundle.js'
   },
   module: {
@@ -22,25 +22,37 @@ export const webpackTestConfig = {
       {
         test: /\.ts$/,
         loader: 'tslint-loader',
-        exclude: [ngAppResolve('node_modules')]
+        exclude: [
+          ngAppResolve('node_modules')
+        ]
       },
       {
         test: /\.js$/,
         loader: 'source-map-loader',
         exclude: [
-        ngAppResolve('node_modules/rxjs'),
-        ngAppResolve('node_modules/@angular')
-      ]}
+          ngAppResolve('node_modules/rxjs'),
+          ngAppResolve('node_modules/@angular')
+        ]
+      }
     ],
     loaders: [
       {
         test: /\.ts$/,
-        loader: 'awesome-typescript-loader',
-        query: {
-          compilerOptions: {
-            removeComments: true
+        loaders: [
+          {
+            loader: 'awesome-typescript-loader',
+            query: {
+              tsconfig: ngAppResolve('./src/tsconfig.json'),
+              resolveGlobs: false,
+              module: "commonjs",
+              target: "es5",
+              library: "es6",
+              lib: ['es5', 'dom'],
+              useForkChecker: false,
+              removeComments: true
+            }
           }
-        },
+        ],
         exclude: [/\.e2e\.ts$/]
       },
       { test: /\.json$/, loader: 'json-loader', exclude: [ngAppResolve('src/index.html')] },
@@ -50,7 +62,6 @@ export const webpackTestConfig = {
     postLoaders: [
       {
         test: /\.(js|ts)$/, loader: 'istanbul-instrumenter-loader',
-        include: ngAppResolve('src'),
         exclude: [
           /\.(e2e|spec)\.ts$/,
           /node_modules/

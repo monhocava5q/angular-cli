@@ -1,5 +1,5 @@
-import {webpackCommonConfig, webpackOutputOptions, IWebpackDevServerConfigurationOptions} from '../models/webpack-build-config.ts';
-import {IServeTaskOptions} from '../commands/serve';
+import {webpackCommonConfig, webpackOutputOptions} from '../models/';
+import {ServeTaskOptions} from '../commands/serve';
 
 const path = require('path');
 const chalk = require('chalk');
@@ -15,7 +15,7 @@ const ProgressPlugin    = require('webpack/lib/ProgressPlugin');
 let lastHash = null;
 
 module.exports = Task.extend({
-  run: (commandOptions: IServeTaskOptions) => {
+  run: (commandOptions: ServeTaskOptions) => {
 
     webpackCommonConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
     const webpackCompiler   = webpack(webpackCommonConfig);

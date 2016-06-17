@@ -7,6 +7,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 export const webpackCommonConfig = {
+  devtool: 'inline-source-map',
   resolve: {
     extensions: ['', '.ts', '.js'],
     root: ngAppResolve('./src')

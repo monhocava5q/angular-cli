@@ -32,7 +32,12 @@ module.exports = Command.extend({
   ],
 
   run: function(commandOptions: BuildOptions) {
-    let buildTask = commandOptions.watch ? new WebpackBuildWatch({options: commandOptions}) : new WebpackBuild({options: commandOptions});
+
+    let buildTask = commandOptions.watch ?
+      new WebpackBuildWatch() :
+      new WebpackBuild();
+
+    console.log(buildTask);
 
     return buildTask.run(commandOptions);
   }

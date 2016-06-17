@@ -41,10 +41,11 @@ module.exports = TestCommand.extend({
       analytics: this.analytics,
       project: this.project
     });
-    var buildOptions = {
-      environment: 'development',
-      outputPath: 'dist/'
-    };
+
+    // var buildOptions = {
+    //   environment: 'development',
+    //   outputPath: 'dist/'
+    // };
 
     // If not building, mock/suppress build tasks.
     // if (!commandOptions.build) {

@@ -11,7 +11,7 @@ PortFinder.basePort = 49152;
 const getPort = Promise.denodeify(PortFinder.getPort);
 const defaultPort = process.env.PORT || 4200;
 
-export interface IServeTaskOptions {
+export interface ServeTaskOptions {
   port?: number;
   host?: string;
   proxy?: string;
@@ -52,12 +52,12 @@ module.exports = Command.extend({
     { name: 'ssl-cert',             type: String,  default: 'ssl/server.crt' }
   ],
 
-  run: function(commandOptions: IServeTaskOptions) {
+  run: function(commandOptions: ServeTaskOptions) {
     commandOptions.liveReloadHost = commandOptions.liveReloadHost || commandOptions.host;
 
     return this._checkExpressPort(commandOptions)
       .then(this._autoFindLiveReloadPort.bind(this))
-      .then(function(commandOptions: IServeTaskOptions) {
+      .then(function(commandOptions: ServeTaskOptions) {
         commandOptions = assign({}, commandOptions, {
           baseURL: this.project.config(commandOptions.environment).baseURL || '/'
         });
@@ -85,7 +85,7 @@ module.exports = Command.extend({
       }.bind(this));
   },
 
-  _checkExpressPort: function(commandOptions: IServeTaskOptions) {
+  _checkExpressPort: function(commandOptions: ServeTaskOptions) {
     return getPort({ port: commandOptions.port, host: commandOptions.host })
       .then(function(foundPort: number) {
 
@@ -101,7 +101,7 @@ module.exports = Command.extend({
       }.bind(this));
   },
 
-  _autoFindLiveReloadPort: function(commandOptions: IServeTaskOptions) {
+  _autoFindLiveReloadPort: function(commandOptions: ServeTaskOptions) {
     return getPort({ port: commandOptions.liveReloadPort, host: commandOptions.liveReloadHost })
       .then(function(foundPort: number) {
 

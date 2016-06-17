@@ -3,5 +3,6 @@ export * from './webpack-build-test';
 export * from './webpack-build-production';
 export * from './webpack-build-development';
 export * from './webpack-build-utils';
+export * from './webpack-build-vendors';
 
 export * from './webpack-karma-config';

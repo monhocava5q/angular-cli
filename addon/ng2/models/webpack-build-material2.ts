@@ -50,6 +50,11 @@ export const webpackMaterialConfig = {
     // ]
     alias: aliasMap
   },
+  sassLoader: {
+    includePaths: [
+        ngAppResolve('./src/demo-app/style')
+    ]
+  },
   debug: true,
   context: path.resolve(__dirname, './'),
   //SAVE entry: {
@@ -59,7 +64,7 @@ export const webpackMaterialConfig = {
   // },
   entry: {
     main: [ngAppResolve('./src/demo-app/main.ts')],
-    // core: ngAppResolve('./src/core/core.ts'),
+    vendor: ngAppResolve('./src/demo-app/vendor.ts')
     // main: ngAppResolve('./src/e2e-app/main.ts')
   },
   output: {
@@ -117,9 +122,11 @@ export const webpackMaterialConfig = {
       // Defaults to the compiler's setting
       debug: true
     }),
+    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
     new ForkCheckerPlugin(),
     new HtmlWebpackPlugin({
       template: ngAppResolve('./src/demo-app/index.html'),
+      chunksSortMode: 'dependency'
     }),
   ],
   node: {

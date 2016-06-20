@@ -1,17 +1,25 @@
-import {webpackOutputOptions, webpackDevConfig, webpackProdConfig} from '../models/';
+import {webpackOutputOptions, webpackDevConfig, webpackProdConfig, webpackDevMaterialConfig} from '../models/';
 
 import {ServeTaskOptions} from '../commands/serve';
 
 const Task            = require('ember-cli/lib/models/task');
 const webpack         = require('webpack');
+const ProgressPlugin  = require('webpack/lib/ProgressPlugin');
 
 let lastHash: any = null;
 
 module.exports = Task.extend({
   run: (runTaskOptions: ServeTaskOptions) => {
+    let config;
 
-    const webpackCompiler = webpack(webpackDevConfig);
-    const ProgressPlugin  = require('webpack/lib/ProgressPlugin');
+    //TODO# Remove after testing material
+    if (runTaskOptions.environment === 'material') {
+      config = webpackDevMaterialConfig;
+    } else {
+      config = webpackDevConfig;
+    }
+
+    const webpackCompiler = webpack(config);
 
     webpackCompiler.apply(new ProgressPlugin({
       profile: true

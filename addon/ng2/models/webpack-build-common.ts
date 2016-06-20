@@ -11,24 +11,14 @@ export const webpackCommonConfig = {
   devtool: 'inline-source-map',
   resolve: {
     extensions: ['', '.ts', '.js'],
-    //SAVE: TODO# Don't use relative bp
-    root: ngAppResolve('/src/demo-app'),
-    alias: {
-      "@angular2-material/core": ngAppResolve('./src/core'),
-      "@angular2-material": ngAppResolve('./src/components')
-    }
+    root: ngAppResolve('./src')
   },
   debug: true,
   context: path.resolve(__dirname, './'),
-  //SAVE entry: {
-  //   main: [ngAppResolve('./src/main.ts')],
-  //   vendor: ngAppResolve('./src/vendor.ts'),
-  //   polyfills: ngAppResolve('./src/polyfills.ts')
-  // },
   entry: {
-    main: [ngAppResolve('./src/demo-app/main.ts')],
-    // core: ngAppResolve('./src/core/core.ts'),
-    // main: ngAppResolve('./src/e2e-app/main.ts')
+    main: [ngAppResolve('./src/main.ts')],
+    vendor: ngAppResolve('./src/vendor.ts'),
+    polyfills: ngAppResolve('./src/polyfills.ts')
   },
   output: {
     path: ngAppResolve('./dist'),
@@ -52,13 +42,11 @@ export const webpackCommonConfig = {
           {
             loader: 'awesome-typescript-loader',
             query: {
-              // useWebpackText: true,
-              tsconfig: ngAppResolve('./src/demo-app/tsconfig.json'),
-              // SAVE tsconfig: ngAppResolve('./src/tsconfig.json'),
+              tsconfig: ngAppResolve('./src/tsconfig.json'),
               // resolveGlobs: false,
               module: "es2015",
               target: "es5",
-              // library: 'es6',
+              library: 'es6',
               useForkChecker: true
             }
           },
@@ -78,46 +66,21 @@ export const webpackCommonConfig = {
     ]
   },
   plugins: [
-    new CopyWebpackPlugin([
-      {from: ngAppResolve('./src/core'), to: ngAppResolve('./dist/core')}
-      {from: ngAppResolve('./src/components'), to: ngAppResolve('./dist/components')}
-    ]),
-    new DebugWebpackPlugin({
-      // Defaults to ['webpack:*'] which can be VERY noisy, so try to be specific
-      // scope: [
-      //   'webpack:compiler:*', // include compiler logs
-      //   'webpack:plugin:ExamplePlugin' // include a specific plugin's logs
-      // ],
-
-      // // Inspect the arguments passed to an event
-      // // These are triggered on emits
-      // listeners: {
-      //   'webpack:compiler:run': function(compiler) {
-      //     // Read some data out of the compiler
-      //   }
-      // },
-      // Defaults to the compiler's setting
-      debug: true;
-    })
     new ForkCheckerPlugin(),
-    //SAVE new HtmlWebpackPlugin({
-    //   template: ngAppResolve('src/index.html'),
-    //   chunksSortMode: 'dependency'
-    // }),
     new HtmlWebpackPlugin({
-      template: ngAppResolve('./src/demo-app/index.html'),
+      template: ngAppResolve('src/index.html'),
+      chunksSortMode: 'dependency'
     }),
-    // new webpack.optimize.CommonsChunkPlugin('core'),
-    //SAVE new webpack.optimize.CommonsChunkPlugin({
-    //   name: ['polyfills', 'vendor'].reverse()
-    // }),
-    // new webpack.optimize.CommonsChunkPlugin({
-    //   minChunks: Infinity,
-    //   name: 'inline',
-    //   filename: 'inline.js',
-    //   sourceMapFilename: 'inline.map'
-    // })
-    // new CopyWebpackPlugin([{from: ngAppResolve('./public'), to: ngAppResolve('./dist/public')}])
+    new webpack.optimize.CommonsChunkPlugin({
+      name: ['polyfills', 'vendor'].reverse()
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      minChunks: Infinity,
+      name: 'inline',
+      filename: 'inline.js',
+      sourceMapFilename: 'inline.map'
+    }),
+    new CopyWebpackPlugin([{from: ngAppResolve('./public'), to: ngAppResolve('./dist/public')}])
   ],
   node: {
     global: 'window',

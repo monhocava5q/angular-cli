@@ -43,7 +43,7 @@ export const webpackProdConfig = webpackMerge(webpackCommonConfig, {
   tslint: {
     emitErrors: true,
     failOnHint: true,
-    resourcePath: ngAppResolve('./src')
+    resourcePath: ngAppResolve('./src/demo-app')
   },
   htmlLoader: {
     minimize: true,

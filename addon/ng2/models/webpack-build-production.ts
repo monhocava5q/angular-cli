@@ -1,12 +1,18 @@
 import * as webpack from 'webpack';
 import {webpackCommonConfig} from '../models/';
+import { webpackMaterialConfig } from './webpack-build-material2';
 import {ngAppResolve} from '../models/webpack-build-utils';
-
 
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 const WebpackMd5Hash = require('webpack-md5-hash');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin'); //TODO WP2 Typings
 const CompressionPlugin = require("compression-webpack-plugin");
+
+
+
+
+
+export const webpackProdMaterialConfig = webpackMerge(webpackCommonConfig, webpackMaterialConfig);
 
 export const webpackProdConfig = webpackMerge(webpackCommonConfig, {
   debug: false,

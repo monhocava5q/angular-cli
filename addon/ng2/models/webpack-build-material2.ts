@@ -1,3 +1,12 @@
+// Angular Material2 Custom CLI Webpack Plugin: This allows for the following:
+// To build, serve, and watchmode the angular2-material repo.
+//
+// Requirements:
+//
+// Do a find and replace on the src directory
+// .css'] => .scss']
+// This allows for angular2-template-loader to transpile the sass correctly.
+
 import * as webpack from 'webpack';
 import {ngAppResolve} from './webpack-build-utils';
 
@@ -26,7 +35,7 @@ var components = [
     'toolbar'
 ];
 /** Map relative paths to URLs. */
-var aliasMap = {
+var aliasMap: any = {
     '@angular2-material/core': ngAppResolve('./src/core'),
 };
 
@@ -39,33 +48,20 @@ export const webpackMaterialConfig = {
   devtool: 'inline-source-map',
   resolve: {
     extensions: ['', '.webpack.js', '.web.js', '.ts', '.tsx', '.js', '.css', '.scss'],
-    //SAVE: TODO# Don't use relative bp
     root: ngAppResolve('./'),
-    // modulesDirectory: [
-    //   ngAppResolve('./src/demo-app/'),
-    //   ngAppResolve('./src/core'),
-    //   ngAppResolve('./src/components'),
-    //   'src/components/',
-    //   'src/core/'
-    // ]
     alias: aliasMap
   },
   sassLoader: {
     includePaths: [
-        ngAppResolve('./src/demo-app/style')
+        // This allows for automatic resolving of @import's for sass for variables.
+        ngAppResolve('./src/core/style')
     ]
   },
   debug: true,
   context: path.resolve(__dirname, './'),
-  //SAVE entry: {
-  //   main: [ngAppResolve('./src/main.ts')],
-  //   vendor: ngAppResolve('./src/vendor.ts'),
-  //   polyfills: ngAppResolve('./src/polyfills.ts')
-  // },
   entry: {
     main: [ngAppResolve('./src/demo-app/main.ts')],
     vendor: ngAppResolve('./src/demo-app/vendor.ts')
-    // main: ngAppResolve('./src/e2e-app/main.ts')
   },
   output: {
     path: './dist',
@@ -103,25 +99,23 @@ export const webpackMaterialConfig = {
     ]
   },
   plugins: [
-    // new webpack.NormalModuleReplacementPlugin(/@angular2-material\/core/, require.resolve(ngAppResolve('./src/core/core.ts'))),
-    // new webpack.NormalModuleReplacementPlugin(/@angular2-material\//, ngAppResolve('./src/components')),
-    new DebugWebpackPlugin({
-      // Defaults to ['webpack:*'] which can be VERY noisy, so try to be specific
-      // scope: [
-      //   'webpack:compiler:*', // include compiler logs
-      //   'webpack:plugin:ExamplePlugin' // include a specific plugin's logs
-      // ],
+    // new DebugWebpackPlugin({
+    //   // Defaults to ['webpack:*'] which can be VERY noisy, so try to be specific
+    //   // scope: [
+    //   //   'webpack:compiler:*', // include compiler logs
+    //   //   'webpack:plugin:ExamplePlugin' // include a specific plugin's logs
+    //   // ],
 
-      // // Inspect the arguments passed to an event
-      // // These are triggered on emits
-      // listeners: {
-      //   'webpack:compiler:run': function(compiler) {
-      //     // Read some data out of the compiler
-      //   }
-      // },
-      // Defaults to the compiler's setting
-      debug: true
-    }),
+    //   // // Inspect the arguments passed to an event
+    //   // // These are triggered on emits
+    //   // listeners: {
+    //   //   'webpack:compiler:run': function(compiler) {
+    //   //     // Read some data out of the compiler
+    //   //   }
+    //   // },
+    //   // Defaults to the compiler's setting
+    //   debug: true
+    // }),
     new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
     new ForkCheckerPlugin(),
     new HtmlWebpackPlugin({

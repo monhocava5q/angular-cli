@@ -1,4 +1,4 @@
-import {webpackCommonConfig, webpackOutputOptions} from '../models/';
+import {webpackCommonConfig, webpackOutputOptions, webpackDevMaterialConfig, webpackProdMaterialConfig} from '../models/';
 import {ServeTaskOptions} from '../commands/serve';
 
 const path = require('path');
@@ -17,8 +17,9 @@ let lastHash = null;
 module.exports = Task.extend({
   run: (commandOptions: ServeTaskOptions) => {
 
-    webpackCommonConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
-    const webpackCompiler   = webpack(webpackCommonConfig);
+    webpackProdMaterialConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
+
+    const webpackCompiler = webpack(webpackProdMaterialConfig);
 
     webpackCompiler.apply(new ProgressPlugin({
       profile: true,

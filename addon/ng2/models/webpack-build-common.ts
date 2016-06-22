@@ -46,7 +46,7 @@ export const webpackCommonConfig = {
               // resolveGlobs: false,
               module: "es2015",
               target: "es5",
-              library: 'es6',
+              lib: ['es6', 'dom'],
               useForkChecker: true
             }
           },

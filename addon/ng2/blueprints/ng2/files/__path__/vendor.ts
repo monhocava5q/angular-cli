@@ -10,7 +10,7 @@ import '@angular/platform-browser';
 import '@angular/platform-browser-dynamic';
 
 <% if(isMobile) { %>
-  '@angular/app-shell';
+  import '@angular/app-shell';
 <% } %>
 
 import 'rxjs/add/operator/map';

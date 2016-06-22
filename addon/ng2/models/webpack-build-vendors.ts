@@ -9,7 +9,7 @@ export const webpackVendorDLLConfig = {
         vendor: [ngAppResolve('./src/vendor.ts')]
     },
     output: {
-        path: path.join(__dirname, "dist", "dll"),
+        path: path.resolve(__dirname, '../models/webpack-dll/')
         filename: "dll.[name].js",
         library: "[name]"
     },

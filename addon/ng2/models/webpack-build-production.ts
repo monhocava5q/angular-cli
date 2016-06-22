@@ -1,6 +1,6 @@
 import * as webpack from 'webpack';
 import {webpackCommonConfig} from '../models/';
-import { webpackMaterialConfig } from './webpack-build-material2';
+import {webpackMaterialConfig, webpackMaterialE2EConfig} from './webpack-build-material2';
 import {ngAppResolve} from '../models/webpack-build-utils';
 
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
@@ -11,10 +11,7 @@ const CompressionPlugin = require("compression-webpack-plugin");
 
 
 
-
-export const webpackProdMaterialConfig = webpackMerge(webpackCommonConfig, webpackMaterialConfig);
-
-export const webpackProdConfig = webpackMerge(webpackCommonConfig, {
+export const webpackProdConfigPartial = {
   debug: false,
   devtool: 'source-map',
   output: {
@@ -49,7 +46,7 @@ export const webpackProdConfig = webpackMerge(webpackCommonConfig, {
   tslint: {
     emitErrors: true,
     failOnHint: true,
-    resourcePath: ngAppResolve('./src/demo-app')
+    resourcePath: ngAppResolve('./src')
   },
   htmlLoader: {
     minimize: true,
@@ -70,4 +67,13 @@ export const webpackProdConfig = webpackMerge(webpackCommonConfig, {
     clearImmediate: false,
     setImmediate: false
   }
-});
+};
+
+
+export const webpackProdConfig = webpackMerge(webpackCommonConfig, webpackProdConfigPartial);
+
+// @angular-material custom builds demo-app and e2e
+export const webpackProdMaterialConfig = webpackMerge(webpackMaterialConfig, webpackProdConfigPartial);
+export const webpackProdMaterialE2EConfig = webpackMerge(webpackMaterialE2EConfig, webpackProdConfigPartial);
+
+

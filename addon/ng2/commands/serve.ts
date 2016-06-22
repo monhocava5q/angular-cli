@@ -45,7 +45,7 @@ module.exports = Command.extend({
     { name: 'live-reload-base-url', type: String,                          aliases: ['lrbu'],  description: 'Defaults to baseURL' },
     { name: 'live-reload-port',     type: Number,                          aliases: ['lrp'],   description: '(Defaults to port number within [49152...65535])' },
     { name: 'live-reload-live-css', type: Boolean, default: true,                              description: 'Whether to live reload CSS (default true)' },
-    { name: 'environment',          type: String,  default: 'development', aliases: ['e', { 'dev': 'development' }, { 'prod': 'production' }] },
+    { name: 'environment',          type: String,  default: 'development', aliases: ['e', { 'dev': 'development' }, { 'mat': 'material'},  { 'prod': 'production' }] },
     { name: 'output-path',          type: 'Path',  default: 'dist/',       aliases: ['op', 'out'] },
     { name: 'ssl',                  type: Boolean, default: false },
     { name: 'ssl-key',              type: String,  default: 'ssl/server.key' },

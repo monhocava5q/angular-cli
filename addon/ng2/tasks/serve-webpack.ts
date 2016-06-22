@@ -1,4 +1,4 @@
-import {webpackCommonConfig, webpackOutputOptions, webpackDevMaterialConfig, webpackProdMaterialConfig} from '../models/';
+import {webpackCommonConfig, webpackOutputOptions, webpackDevMaterialConfig, webpackProdMaterialConfig, webpackDevMaterialE2EConfig, webpackDevConfig} from '../models/';
 import {ServeTaskOptions} from '../commands/serve';
 
 const path = require('path');
@@ -16,10 +16,20 @@ let lastHash = null;
 
 module.exports = Task.extend({
   run: (commandOptions: ServeTaskOptions) => {
+    let webpackCompiler: any;
+    if (commandOptions.environment === 'material') {
+      webpackDevMaterialConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
+      webpackCompiler = webpack(webpackDevMaterialConfig);
 
-    webpackProdMaterialConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
+    } else if (commandOptions.environment === 'e2e') {
+      webpackDevMaterialE2EConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
+      webpackCompiler = webpack(webpackDevMaterialE2EConfig);
 
-    const webpackCompiler = webpack(webpackProdMaterialConfig);
+    } else {
+      webpackDevConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
+      webpackCompiler = webpack(webpackDevConfig);
+
+    }
 
     webpackCompiler.apply(new ProgressPlugin({
       profile: true,

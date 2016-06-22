@@ -1,5 +1,5 @@
 import { webpackCommonConfig } from '../models';
-import { webpackMaterialConfig } from './webpack-build-material2';
+import { webpackMaterialConfig, webpackMaterialE2EConfig } from './webpack-build-material2';
 import { ngAppResolve } from './webpack-build-utils';
 
 const webpackMerge = require('webpack-merge');
@@ -31,4 +31,5 @@ const devConfigPartial = {
 export const webpackDevConfig = webpackMerge(webpackCommonConfig, devConfigPartial);
 
 export const webpackDevMaterialConfig = webpackMerge(webpackMaterialConfig, devConfigPartial);
-});
+
+export const webpackDevMaterialE2EConfig = webpackMerge(webpackMaterialE2EConfig, devConfigPartial);

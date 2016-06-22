@@ -92,7 +92,7 @@ export const webpackMaterialConfig = {
       { test: /\.json$/, loader: 'json-loader'},
       { test: /\.css$/,  loaders: ['raw-loader', 'postcss-loader'] },
       { test: /\.styl$/, loaders: ['raw-loader', 'postcss-loader', 'stylus-loader'] },
-      { test: /\.less$/, loaders: ['raw-loader', 'postcss-loader', 'less-loader'] },
+      { test: /\.less$/, loaders: ['raw-loader', 'less-loader'] },
       { test: /\.s?css$/, loaders: ['raw-loader', 'postcss-loader', 'sass-loader'] },
       { test: /\.(jpg|png)$/, loader: 'url-loader?limit=128000'},
       { test: /\.html$/, loader: 'raw-loader' }
@@ -148,8 +148,8 @@ export const webpackMaterialE2EConfig = {
   debug: true,
   context: path.resolve(__dirname, './'),
   entry: {
-    main: [ngAppResolve('./src/e2e-app/main.ts')],
-    vendor: ngAppResolve('./src/e2e-app/vendor.ts')
+    main: [ngAppResolve('./src/demo-app/main.ts')],
+    vendor: ngAppResolve('./src/demo-app/vendor.ts')
   },
   output: {
     path: './dist',
@@ -167,7 +167,7 @@ export const webpackMaterialE2EConfig = {
       }
     ],
     ts: {
-      configFileName: ngAppResolve('./src/e2e-app/tsconfig.json')
+      configFileName: ngAppResolve('./src/demo-app/tsconfig.json')
     },
     loaders: [
       {
@@ -180,7 +180,7 @@ export const webpackMaterialE2EConfig = {
       { test: /\.json$/, loader: 'json-loader'},
       { test: /\.css$/,  loaders: ['raw-loader', 'postcss-loader'] },
       { test: /\.styl$/, loaders: ['raw-loader', 'postcss-loader', 'stylus-loader'] },
-      { test: /\.less$/, loaders: ['raw-loader', 'postcss-loader', 'less-loader'] },
+      { test: /\.less$/, loaders: ['raw-loader', 'less-loader'] },
       { test: /\.s?css$/, loaders: ['raw-loader', 'postcss-loader', 'sass-loader'] },
       { test: /\.(jpg|png)$/, loader: 'url-loader?limit=128000'},
       { test: /\.html$/, loader: 'raw-loader' }
@@ -207,7 +207,7 @@ export const webpackMaterialE2EConfig = {
     new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
     new ForkCheckerPlugin(),
     new HtmlWebpackPlugin({
-      template: ngAppResolve('./src/e2e-app/index.html'),
+      template: ngAppResolve('./src/demo-app/index.html'),
       chunksSortMode: 'dependency'
     }),
   ],

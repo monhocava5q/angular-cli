@@ -43,8 +43,8 @@ module.exports = Task.extend({
       inline: true
     };
 
-    const server = new WebpackDevServer(webpackCompiler, webpackDevServerConfiguration);
     const serveMessage:string = chalk.green(`\n*\n*\n NG Live Development Server is running on http://localhost:${commandOptions.port}.\n*\n*`);
+    const server = new WebpackDevServer(webpackCompiler, webpackDevServerConfiguration);
 
     return new Promise((resolve, reject) => {
       server.listen(commandOptions.port, "localhost", function(err, stats) {

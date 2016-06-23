@@ -31,6 +31,7 @@
   "homepage": "https://github.com/angular/angular-cli",
   "dependencies": {
     "@angular/compiler-cli": "^0.2.0",
+    "@angularclass/webpack-toolkit": "^1.0.1",
     "@types/webpack": "^1.12.22-alpha",
     "angular2-template-loader": "^0.4.0",
     "awesome-typescript-loader": "^2.0.0-rc.3",

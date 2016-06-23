@@ -148,8 +148,8 @@ export const webpackMaterialE2EConfig = {
   debug: true,
   context: path.resolve(__dirname, './'),
   entry: {
-    main: [ngAppResolve('./src/demo-app/main.ts')],
-    vendor: ngAppResolve('./src/demo-app/vendor.ts')
+    main: [ngAppResolve('./src/e2e-app/main.ts')],
+    vendor: ngAppResolve('./src/e2e-app/vendor.ts')
   },
   output: {
     path: './dist',
@@ -167,7 +167,7 @@ export const webpackMaterialE2EConfig = {
       }
     ],
     ts: {
-      configFileName: ngAppResolve('./src/demo-app/tsconfig.json')
+      configFileName: ngAppResolve('./src/e2e-app/tsconfig.json')
     },
     loaders: [
       {
@@ -207,7 +207,7 @@ export const webpackMaterialE2EConfig = {
     new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
     new ForkCheckerPlugin(),
     new HtmlWebpackPlugin({
-      template: ngAppResolve('./src/demo-app/index.html'),
+      template: ngAppResolve('./src/e2e-app/index.html'),
       chunksSortMode: 'dependency'
     }),
   ],

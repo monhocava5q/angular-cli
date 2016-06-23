@@ -7,7 +7,7 @@ var validProjectName = require('ember-cli/lib/utilities/valid-project-name');
 var normalizeBlueprint = require('ember-cli/lib/utilities/normalize-blueprint-option');
 var GitInit = require('../tasks/git-init');
 var LinkCli = require('../tasks/link-cli');
-var BuildWebpackDll = require('../tasks/build-webpack-dll');
+
 
 module.exports = Command.extend({
   name: 'init',
@@ -46,12 +46,6 @@ module.exports = Command.extend({
     }
 
     var installBlueprint = new this.tasks.InstallBlueprint({
-      ui: this.ui,
-      analytics: this.analytics,
-      project: this.project
-    });
-
-    var buildWebpackDll = new BuildWebpackDll({
       ui: this.ui,
       analytics: this.analytics,
       project: this.project
@@ -148,12 +142,6 @@ module.exports = Command.extend({
             verbose: commandOptions.verbose
           });
         }
-      })
-      .then(function() {
-        return buildWebpackDll.run({
-          verbose: commandOptions.verbose,
-          optional: false
-        })
       });
   }
 });

@@ -13,7 +13,6 @@ export const webpackCommonConfig = {
     extensions: ['', '.ts', '.js'],
     root: ngAppResolve('./src')
   },
-  debug: true,
   context: path.resolve(__dirname, './'),
   entry: {
     main: [ngAppResolve('./src/main.ts')],

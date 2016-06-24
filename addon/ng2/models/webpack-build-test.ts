@@ -42,15 +42,18 @@ export const webpackTestConfig = {
           {
             loader: 'awesome-typescript-loader',
             query: {
+              useWebpackText: true,
               tsconfig: ngAppResolve('./src/tsconfig.json'),
-              resolveGlobs: false,
+              // resolveGlobs: false,
               module: "commonjs",
               target: "es5",
-              library: "es6",
-              lib: ['es5', 'dom'],
-              useForkChecker: false,
+              lib: ['es6', 'dom'],
+              useForkChecker: true,
               removeComments: true
             }
+          },
+          {
+            loader: 'angular2-template-loader'
           }
         ],
         exclude: [/\.e2e\.ts$/]

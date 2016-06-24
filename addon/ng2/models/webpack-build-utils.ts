@@ -1,7 +1,7 @@
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 
-import {webpackDevConfig, webpackProdConfig, webpackVendorDLLConfig} from './';
+import {webpackDevConfig, webpackProdConfig} from './';
 
 export const ngAppResolve = (resolvePath: string): string => {
   return path.resolve(process.cwd(), resolvePath);
@@ -15,6 +15,16 @@ export const webpackOutputOptions: WebpackProgressPluginOutputOptions = {
   chunkModules: false
 }
 
+export const webpackDevServerOutputOptions = {
+  assets: true,
+  colors: true,
+  version: true,
+  hash: true,
+  timings: true,
+  chunks: false,
+  chunkModules: false
+}
+
 export const postCssConfiguration = () => {
   return {
     defaults: [autoprefixer]
@@ -23,6 +33,5 @@ export const postCssConfiguration = () => {
 
 export const envToConfigMap: any = {
   production: webpackProdConfig,
-  development: webpackDevConfig,
-  vendor: webpackVendorDLLConfig
+  development: webpackDevConfig
 }

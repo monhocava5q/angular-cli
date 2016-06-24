@@ -23,19 +23,19 @@ export const webpackProdConfigPartial = {
   plugins: [
     new WebpackMd5Hash(),
     new webpack.optimize.DedupePlugin(),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   beautify: false, //prod
-    //   mangle: { screw_ie8 : true }, //prod
-    //   compress: { screw_ie8: true }, //prod
-    //   comments: false //prod
-    // }),
-    // new CompressionPlugin({
-    //     asset: "[path].gz[query]",
-    //     algorithm: "gzip",
-    //     test: /\.js$|\.html$/,
-    //     threshold: 10240,
-    //     minRatio: 0.8
-    // }),
+    new webpack.optimize.UglifyJsPlugin({
+      beautify: false, //prod
+      mangle: { screw_ie8 : true }, //prod
+      compress: { screw_ie8: true }, //prod
+      comments: false //prod
+    }),
+    new CompressionPlugin({
+        asset: "[path].gz[query]",
+        algorithm: "gzip",
+        test: /\.js$|\.html$/,
+        threshold: 10240,
+        minRatio: 0.8
+    }),
     new LoaderOptionsPlugin({
       test: /\.js/,
       minimize: true,

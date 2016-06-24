@@ -1,4 +1,12 @@
-import {webpackCommonConfig, webpackOutputOptions, webpackDevMaterialConfig, webpackProdMaterialConfig, webpackDevMaterialE2EConfig, webpackDevConfig} from '../models/';
+import {
+  webpackDevServerOutputOptions,
+  webpackOutputOptions,
+  webpackCommonConfig,
+  webpackDevMaterialConfig,
+  webpackProdMaterialConfig,
+  webpackDevMaterialE2EConfig,
+  webpackDevConfig,
+} from '../models/';
 import {ServeTaskOptions} from '../commands/serve';
 
 const path = require('path');
@@ -16,6 +24,9 @@ let lastHash = null;
 
 module.exports = Task.extend({
   run: (commandOptions: ServeTaskOptions) => {
+
+
+
     let webpackCompiler: any;
     if (commandOptions.environment === 'material') {
       webpackDevMaterialConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
@@ -39,7 +50,7 @@ module.exports = Task.extend({
     const webpackDevServerConfiguration: IWebpackDevServerConfigurationOptions = {
       contentBase: path.resolve(process.cwd(), './src'),
       historyApiFallback: true,
-      stats: { colors: true },
+      stats: webpackDevServerOutputOptions,
       inline: true
     };
 
@@ -47,6 +58,7 @@ module.exports = Task.extend({
     const server = new WebpackDevServer(webpackCompiler, webpackDevServerConfiguration);
 
     return new Promise((resolve, reject) => {
+      process.stdout.write(chalk.red('\n\n' + chalk.underline.bgYellow('TODO#'), 'Implement ENV Flags for serve builds.\n\n'));
       server.listen(commandOptions.port, "localhost", function(err, stats) {
         if(err) {
           lastHash = null;

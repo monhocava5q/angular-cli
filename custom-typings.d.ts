@@ -15,7 +15,7 @@ interface IWebpackDevServerConfigurationOptions {
   };
   publicPath?: string;
   headers?: { [key:string]: string };
-  stats?: { colors: boolean; };
+  stats?: { [key:string]: boolean };
   inline: boolean;
 }
 

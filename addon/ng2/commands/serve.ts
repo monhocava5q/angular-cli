@@ -6,6 +6,7 @@ const PortFinder  = require('portfinder');
 const win         = require('ember-cli/lib/utilities/windows-admin');
 const EOL         = require('os').EOL;
 
+
 PortFinder.basePort = 49152;
 
 const getPort = Promise.denodeify(PortFinder.getPort);
@@ -53,6 +54,8 @@ module.exports = Command.extend({
   ],
 
   run: function(commandOptions: ServeTaskOptions) {
+
+
     commandOptions.liveReloadHost = commandOptions.liveReloadHost || commandOptions.host;
 
     return this._checkExpressPort(commandOptions)

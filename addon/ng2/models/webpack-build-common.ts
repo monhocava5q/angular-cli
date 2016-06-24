@@ -42,6 +42,7 @@ export const webpackCommonConfig = {
           {
             loader: 'awesome-typescript-loader',
             query: {
+              useWebpackText: true,
               tsconfig: ngAppResolve('./src/tsconfig.json'),
               // resolveGlobs: false,
               module: "es2015",

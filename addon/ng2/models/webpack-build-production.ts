@@ -23,6 +23,14 @@ export const webpackProdConfigPartial = {
   plugins: [
     new WebpackMd5Hash(),
     new webpack.optimize.DedupePlugin(),
+    // ~400kb (Doesn't do anything different (yet?))
+    // new LoaderOptionsPlugin({
+    //   test: /\.js/,
+    //   minimize: true,
+    //   optimize: true,
+    //   debug: false
+    // }),
+    // ~107kb
     new webpack.optimize.UglifyJsPlugin({
       beautify: false, //prod
       mangle: { screw_ie8 : true }, //prod
@@ -35,12 +43,6 @@ export const webpackProdConfigPartial = {
         test: /\.js$|\.html$/,
         threshold: 10240,
         minRatio: 0.8
-    }),
-    new LoaderOptionsPlugin({
-      test: /\.js/,
-      minimize: true,
-      optimize: true,
-      debug: false
     })
   ],
   tslint: {

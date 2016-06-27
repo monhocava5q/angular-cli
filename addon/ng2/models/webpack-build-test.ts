@@ -58,8 +58,12 @@ export const webpackTestConfig = {
         ],
         exclude: [/\.e2e\.ts$/]
       },
-      { test: /\.json$/, loader: 'json-loader', exclude: [ngAppResolve('src/index.html')] },
-      { test: /\.css$/, loader: 'raw-loader', exclude: [ngAppResolve('src/index.html')] },
+      { test: /\.json$/, loader: 'json-loader'},
+      { test: /\.css$/,  loaders: ['raw-loader', 'postcss-loader'] },
+      { test: /\.styl$/, loaders: ['raw-loader', 'postcss-loader', 'stylus-loader'] },
+      { test: /\.less$/, loaders: ['raw-loader', 'postcss-loader', 'less-loader'] },
+      { test: /\.scss$/, loaders: ['raw-loader', 'postcss-loader', 'sass-loader'] },
+      { test: /\.(jpg|png)$/, loader: 'url-loader?limit=128000'},
       { test: /\.html$/, loader: 'raw-loader', exclude: [ngAppResolve('src/index.html')] }
     ],
     postLoaders: [

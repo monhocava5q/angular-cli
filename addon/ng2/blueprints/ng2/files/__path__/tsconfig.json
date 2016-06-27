@@ -1,24 +1,23 @@
 {
-  "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": ".",
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "mapRoot": "/",
     "module": "commonjs",
     "moduleResolution": "node",
-    "noEmitOnError": true,
-    "noImplicitAny": false,
-    "outDir": "../dist/",
+    "outDir": "./dist/",
     "rootDir": ".",
     "sourceMap": true,
-    "target": "es5",
-    "inlineSources": true
+    "sourceRoot": ".",
+    "target": "es2015"
   },
-
+  "exclude": [
+    "node_modules",
+    "bower_components"
+  ],
   "files": [
-    "main.ts",<% if (isMobile) { %>
-    "main-app-shell.ts",<% } %>
-    "typings.d.ts"
+    "./src/typings.d.ts"
   ]
 }

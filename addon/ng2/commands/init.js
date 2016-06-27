@@ -8,6 +8,7 @@ var normalizeBlueprint = require('ember-cli/lib/utilities/normalize-blueprint-op
 var GitInit = require('../tasks/git-init');
 var LinkCli = require('../tasks/link-cli');
 
+
 module.exports = Command.extend({
   name: 'init',
   description: 'Creates a new angular-cli project in the current folder.',
@@ -93,7 +94,7 @@ module.exports = Command.extend({
 
       return Promise.reject(new SilentError(message));
     }
-    
+
     var blueprintOpts = {
       dryRun: commandOptions.dryRun,
       blueprint: commandOptions.blueprint || this._defaultBlueprint(),

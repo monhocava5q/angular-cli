@@ -30,10 +30,10 @@ export class NgCliWebpackConfig {
     this.webpackMaterialE2EConfig = getWebpackMaterialE2EConfig(this.ngCliProject.root);
     this.webpackDevConfigPartial = getWebpackDevConfigPartial(this.ngCliProject.root);
     this.webpackProdConfigPartial = getWebpackProdConfigPartial(this.ngCliProject.root);
-    this.webpackMobileConfigPartial = getWebpackMobileConfigPartial(this.ngCliProject.root);
-    this.webpackMobileProdConfigPartial = getWebpackMobileProdConfigPartial(this.ngCliProject.root);
 
     if (CliConfig.fromProject().apps[0].mobile){
+      this.webpackMobileConfigPartial = getWebpackMobileConfigPartial(this.ngCliProject.root);
+      this.webpackMobileProdConfigPartial = getWebpackMobileProdConfigPartial(this.ngCliProject.root);
       this.webpackDevConfigPartial = webpackMerge(this.webpackDevConfigPartial, this.webpackMobileConfigPartial);
       this.webpackProdConfigPartial = webpackMerge(this.webpackProdConfigPartial, this.webpackMobileProdConfigPartial);
     }

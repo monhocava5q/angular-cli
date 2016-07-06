@@ -27,19 +27,19 @@ export const getWebpackProdConfigPartial = function(projectRoot: string) {
       //   debug: false
       // }),
       // ~107kb
-      // new webpack.optimize.UglifyJsPlugin({
-      //   beautify: false, //prod
-      //   mangle: { screw_ie8 : true }, //prod
-      //   compress: { screw_ie8: true }, //prod
-      //   comments: false //prod
-      // }),
-      // new CompressionPlugin({
-      //     asset: "[path].gz[query]",
-      //     algorithm: "gzip",
-      //     test: /\.js$|\.html$/,
-      //     threshold: 10240,
-      //     minRatio: 0.8
-      // })
+      new webpack.optimize.UglifyJsPlugin({
+        beautify: false, //prod
+        mangle: { screw_ie8 : true }, //prod
+        compress: { screw_ie8: true }, //prod
+        comments: false //prod
+      }),
+      new CompressionPlugin({
+          asset: "[path].gz[query]",
+          algorithm: "gzip",
+          test: /\.js$|\.html$/,
+          threshold: 10240,
+          minRatio: 0.8
+      })
     ],
     tslint: {
       emitErrors: true,

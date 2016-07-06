@@ -19,22 +19,8 @@ module.exports = Task.extend({
   run: function(commandOptions: ServeTaskOptions) {
 
     let webpackCompiler: any;
-    // if (commandOptions.environment === 'material') {
-    //   webpackDevMaterialConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
-    //   webpackCompiler = webpack(webpackDevMaterialConfig);
 
-    // } else if (commandOptions.environment === 'e2e') {
-    //   webpackDevMaterialE2EConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
-    //   webpackCompiler = webpack(webpackDevMaterialE2EConfig);
-
-    // } else {
-    //   webpackDevConfig.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
-    //   webpackCompiler = webpack(webpackDevConfig);
-    // }
-
-    // since the .config method on the returned instance is just an object we can modify any part of it for our needs
-    var config = new NgCliWebpackConfig(this.project, commandOptions.environment).config;
-    config.entry.main.unshift(`webpack-dev-server/client?http://localhost:${commandOptions.port}/`);
+    var config: NgCliWebpackConfig = new NgCliWebpackConfig(this.project, commandOptions.environment).config;
     webpackCompiler = webpack(config);
 
 
@@ -44,7 +30,7 @@ module.exports = Task.extend({
     }));
 
     const webpackDevServerConfiguration: IWebpackDevServerConfigurationOptions = {
-      contentBase: path.resolve(process.cwd(), './src'),
+      contentBase: path.resolve(this.project.root, './src'),
       historyApiFallback: true,
       stats: webpackDevServerOutputOptions,
       inline: true
@@ -54,7 +40,6 @@ module.exports = Task.extend({
     const server = new WebpackDevServer(webpackCompiler, webpackDevServerConfiguration);
 
     return new Promise((resolve, reject) => {
-      process.stdout.write(chalk.red('\n\n' + chalk.underline.bgYellow('TODO#'), 'Implement ENV Flags for serve builds.\n\n'));
       server.listen(commandOptions.port, "localhost", function(err, stats) {
         if(err) {
           lastHash = null;

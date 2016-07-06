@@ -5,7 +5,7 @@ var Promise = require('ember-cli/lib/ext/promise');
 var Task = require('ember-cli/lib/models/task');
 var path = require('path');
 var ngAppResolve = require('../models').ngAppResolve;
-var webpackTestConfig = require('../models').webpackTestConfig;
+var webpackTestConfig = require('../models/webpack-build-test').getWebpackTestConfig;
 var displayOptions = require('../models/webpack-build-utils').webpackOutputOptions;
 
 // require dependencies within the target project
@@ -39,10 +39,18 @@ module.exports = Task.extend({
       // Single test entry file. Will run the test.ts bundle and track it.
       options.files = [{ pattern: './src/test.ts', watched: false }];
       options.preprocessors = { './src/test.ts': ['coverage','webpack','sourcemap'] };
-      options.webpack = webpackTestConfig;
+      options.webpack = webpackTestConfig(projectRoot);
       options.webpackMiddleware = {
-        noInfo: true, // Hide webpack output because its noisy
-        stats: displayOptions // Also prevent chunk and module display output, cleaner look.
+        noInfo: true, // Hide webpack output because its noisy.
+        stats: { // Also prevent chunk and module display output, cleaner look. Only emit errors.
+          assets: false,
+          colors: true,
+          version: false,
+          hash: false,
+          timings: false,
+          chunks: false,
+          chunkModules: false
+        }
       };
 
       // Convert browsers from a string to an array

@@ -18,7 +18,9 @@ If you wish to collaborate while the project is still young, check out [our issu
 
 ## Prerequisites
 
-The generated project has dependencies that require **Node 4 or greater**.
+The generated project has dependencies that require 
+* **Node 4 or greater**.
+* **Typings v1 or greater**.
 
 ## Table of Contents
 
@@ -130,16 +132,16 @@ The build artifacts will be stored in the `dist/` directory.
 
 ### Environments
 
-At build time, the `src/client/app/environment.ts` will be replaced by either
+At build time, the `src/app/environment.ts` will be replaced by either
 `config/environment.dev.ts` or `config/environment.prod.ts`, depending on the
-current cli environment.
+current cli environment. The resulting file will be `dist/app/environment.ts`.
 
 Environment defaults to `dev`, but you can generate a production build via
 the `-prod` flag in either `ng build -prod` or `ng serve -prod`.
 
-You can also add your own env files other than `dev` and `prod` by creating a 
-`src/client/app/environment.{NAME}.ts` and use them by using the `--env=NAME` 
-flag on the build/serve commands. 
+You can also add your own env files other than `dev` and `prod` by creating a
+`config/environment.{NAME}.ts` and use them by using the `--env=NAME`
+flag on the build/serve commands.
 
 ### Bundling
 

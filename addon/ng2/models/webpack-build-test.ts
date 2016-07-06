@@ -47,7 +47,6 @@ export const getWebpackTestConfig = function(projectRoot: string) {
                 // resolveGlobs: false,
                 module: "commonjs",
                 target: "es5",
-                lib: ['es6', 'dom'],
                 useForkChecker: true,
                 removeComments: true
               }

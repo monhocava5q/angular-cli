@@ -42,12 +42,8 @@ export const getWebpackCommonConfig = function(projectRoot: string) {
               loader: 'awesome-typescript-loader',
               query: {
                 useWebpackText: true,
-                tsconfig: path.resolve(projectRoot, './src/tsconfig.json'),
-                // resolveGlobs: false,
-                module: "es2015",
-                target: "es5",
-                lib: ['es6', 'dom'],
-                useForkChecker: true
+                useForkChecker: true,
+                tsconfig: path.resolve(projectRoot, './src/tsconfig.json')
               }
             },
             {

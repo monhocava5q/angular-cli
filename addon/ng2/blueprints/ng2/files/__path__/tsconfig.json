@@ -4,14 +4,15 @@
     "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "mapRoot": "/",
-    "module": "commonjs",
+    "module": "es6",
+    "target": "es5",
+    "lib": ["es6", "dom"],
     "moduleResolution": "node",
     "outDir": "./dist/",
     "rootDir": ".",
+    "mapRoot": "/",
     "sourceMap": true,
-    "sourceRoot": ".",
-    "target": "es2015"
+    "sourceRoot": "."
   },
   "exclude": [
     "node_modules",

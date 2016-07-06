@@ -6,7 +6,6 @@
     "experimentalDecorators": true,
     "module": "es6",
     "target": "es5",
-    "lib": ["es6", "dom"],
     "moduleResolution": "node",
     "outDir": "./dist/",
     "rootDir": ".",
@@ -19,6 +18,6 @@
     "bower_components"
   ],
   "files": [
-    "./src/typings.d.ts"
+    "typings.d.ts"
   ]
 }

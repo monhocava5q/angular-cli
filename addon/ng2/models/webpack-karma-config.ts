@@ -16,7 +16,7 @@ export default function(config) {
     preprocessors: { './config/spec-bundle.js': ['coverage', 'webpack', 'sourcemap'] },
     webpack: testWebpackConfig,
     webpackServer: { noInfo: true },
-    reporters: [ 'mocha', 'coverage' ],
+    reporters: ['progress', 'mocha', 'coverage' ],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

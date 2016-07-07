@@ -1,5 +1,4 @@
 const path = require('path');
-const autoprefixer = require('autoprefixer');
 
 export const ngAppResolve = (resolvePath: string): string => {
   return path.resolve(process.cwd(), resolvePath);
@@ -21,10 +20,4 @@ export const webpackDevServerOutputOptions = {
   timings: true,
   chunks: false,
   chunkModules: false
-}
-
-export const postCssConfiguration = () => {
-  return {
-    defaults: [autoprefixer]
-  };
 }

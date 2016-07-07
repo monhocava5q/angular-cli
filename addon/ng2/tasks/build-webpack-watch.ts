@@ -1,13 +1,13 @@
 import {NgCliWebpackConfig} from '../models/webpack-config'
 import {webpackOutputOptions} from '../models/';
-
 import {ServeTaskOptions} from '../commands/serve';
+import * as rimraf from 'rimraf';
+import * as path from 'path';
 
-  var Task            = require('ember-cli/lib/models/task');
+var Task              = require('ember-cli/lib/models/task');
 const webpack         = require('webpack');
 const ProgressPlugin  = require('webpack/lib/ProgressPlugin');
-const rimraf          = require('rimraf');
-const path          = require('path');
+
 
 let lastHash: any = null;
 

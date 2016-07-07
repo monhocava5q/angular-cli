@@ -1,4 +1,5 @@
 import * as webpack from 'webpack';
+import {PathsPlugin, LoaderConfig} from '../utilities/ts-path-mappings-webpack-plugin';
 
 const path = require('path');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
@@ -6,11 +7,19 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 export const getWebpackCommonConfig = function(projectRoot: string) {
+  const awesomeTypescriptLoaderConfig: LoaderConfig | any = {
+    useWebpackText: true,
+    useForkChecker: true,
+    tsconfig: path.resolve(projectRoot, './src/tsconfig.json')
+  }
+
   return {
     devtool: 'inline-source-map',
     resolve: {
       extensions: ['', '.ts', '.js'],
-      root: path.resolve(projectRoot, './src')
+      plugins: [
+        new PathsPlugin(awesomeTypescriptLoaderConfig)
+      ]
     },
     context: path.resolve(__dirname, './'),
     entry: {
@@ -39,11 +48,7 @@ export const getWebpackCommonConfig = function(projectRoot: string) {
           loaders: [
             {
               loader: 'awesome-typescript-loader',
-              query: {
-                useWebpackText: true,
-                useForkChecker: true,
-                tsconfig: path.resolve(projectRoot, './src/tsconfig.json')
-              }
+              query: awesomeTypescriptLoaderConfig
             },
             {
               loader: 'angular2-template-loader'

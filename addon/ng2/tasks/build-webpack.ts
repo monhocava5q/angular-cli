@@ -1,14 +1,14 @@
 import {ServeTaskOptions} from '../commands/serve';
 import {NgCliWebpackConfig} from '../models/webpack-config'
 import {webpackOutputOptions} from '../models/'
+import * as rimraf from 'rimraf';
+import * as path from 'path';
 
 // Configure build and output;
 var Task            = require('ember-cli/lib/models/task');
 const webpack       = require('webpack');
-const rimraf        = require('rimraf');
-const path          = require('path');
 
-let lastHash = null;
+let lastHash: any = null;
 
 module.exports = Task.extend({
   // Options: String outputPath

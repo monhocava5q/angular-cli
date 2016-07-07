@@ -13,7 +13,6 @@ const path = require('path');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const DebugWebpackPlugin = require('debug-webpack-plugin');
 
 
 var components = [

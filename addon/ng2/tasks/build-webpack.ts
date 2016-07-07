@@ -4,7 +4,9 @@ import {webpackOutputOptions} from '../models/'
 
 // Configure build and output;
 var Task            = require('ember-cli/lib/models/task');
-const webpack         = require('webpack');
+const webpack       = require('webpack');
+const rimraf        = require('rimraf');
+const path          = require('path');
 
 let lastHash = null;
 
@@ -13,6 +15,9 @@ module.exports = Task.extend({
   run: function(runTaskOptions: ServeTaskOptions) {
 
     var project = this.cliProject;
+
+    rimraf.sync(path.resolve(project.root, runTaskOptions.outputPath));
+
     var config = new NgCliWebpackConfig(project, runTaskOptions.environment).config;
     const webpackCompiler = webpack(config);
 

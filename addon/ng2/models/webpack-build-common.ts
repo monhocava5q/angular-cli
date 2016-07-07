@@ -4,7 +4,6 @@ const path = require('path');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const DebugWebpackPlugin = require('debug-webpack-plugin');
 
 export const getWebpackCommonConfig = function(projectRoot: string) {
   return {
@@ -76,7 +75,7 @@ export const getWebpackCommonConfig = function(projectRoot: string) {
         filename: 'inline.js',
         sourceMapFilename: 'inline.map'
       }),
-      new CopyWebpackPlugin([{from: path.resolve(projectRoot, './public'), to: path.resolve(projectRoot, './dist/public')}])
+      new CopyWebpackPlugin([{from: path.resolve(projectRoot, './public'), to: path.resolve(projectRoot, './dist')}])
     ],
     node: {
       global: 'window',

@@ -83,7 +83,7 @@ export interface Mapping {
 export function readConfigFile(baseDir: string, query: QueryOptions, tsImpl: typeof ts): Configs {
     let configFilePath: string;
     if (query.tsconfig && query.tsconfig.match(/\.json$/)) {
-        configFilePath = query.tsconfig;
+        configFilePath = path.dirname(path.resolve(process.cwd(),query.tsconfig));
     } else {
         configFilePath = tsImpl.findConfigFile(process.cwd(), tsImpl.sys.fileExists);
     }
@@ -104,6 +104,8 @@ export function readConfigFile(baseDir: string, query: QueryOptions, tsImpl: typ
         };
     }
 
+    debugger;
+
     let jsonConfigFile = tsImpl.readConfigFile(configFilePath, tsImpl.sys.readFile);
 
     let compilerConfig = tsImpl.parseJsonConfigFileContent(
@@ -115,6 +117,7 @@ export function readConfigFile(baseDir: string, query: QueryOptions, tsImpl: typ
     );
 
     return {
+        jsonConfigFile,
         configFilePath,
         compilerConfig,
         loaderConfig: _.defaults<LoaderConfig, LoaderConfig>(
@@ -169,17 +172,16 @@ export class PathsPlugin implements ResolverPlugin {
 
         this.ts = setupTs(config.compiler).tsImpl;
 
-        let { configFilePath, compilerConfig } = readConfigFile(process.cwd(), config, this.ts);
+        let { configFilePath, compilerConfig, jsonConfigFile } = readConfigFile(process.cwd(), config, this.ts);
         this.options = compilerConfig.options;
         this.configFilePath = configFilePath;
 
-        this.baseUrl = this.options.baseUrl;
+        this.baseUrl = this.options.configFilePath ? this.options.configFilePath : './';
+
         this.absoluteBaseUrl = path.resolve(
             path.dirname(this.configFilePath),
             this.baseUrl
         );
-
-        debugger;
 
         console.log("CONFIG FILE AND BASE URL");
         console.log(this.configFilePath, this.absoluteBaseUrl);
@@ -210,63 +212,44 @@ export class PathsPlugin implements ResolverPlugin {
     }
 
     apply(resolver: Resolver) {
-        let { baseUrl, mappings } = this;
+        let { baseUrl, mappings, absoluteBaseUrl } = this;
 
         if (baseUrl) {
-            resolver.apply(new ModulesInRootPlugin("module", this.absoluteBaseUrl, "resolve"));
+            resolver.apply(new ModulesInRootPlugin("module", absoluteBaseUrl, "resolve"));
         }
 
         mappings.forEach(mapping => {
-            resolver.plugin(this.source, this.createPlugin(resolver, mapping));
-        });
-    }
+            // resolver.plugin(this.source, this.createPlugin(resolver, mapping));
+            resolver.plugin(this.source, function(request, callback) {
+              var innerRequest = getInnerRequest(resolver, request);
+              if(!innerRequest) return callback();
 
-    createPlugin(resolver: Resolver, mapping: Mapping) {
-        return (request, callback) => {
-            let innerRequest = getInnerRequest(resolver, request);
-            if (!innerRequest) {
-                return callback();
-            }
-
-            let match = innerRequest.match(mapping.aliasPattern);
-            if (!match) {
-                return callback();
-            }
-
-            let newRequestStr = mapping.target;
-            if (!mapping.onlyModule) {
-                newRequestStr = newRequestStr.replace('*', match[1]);
-            }
-
-            if (newRequestStr[0] === '.') {
-                newRequestStr = path.resolve(this.absoluteBaseUrl, newRequestStr);
-            }
-
-            let newRequest: Request = Object.assign({}, request, {
+              var newRequestStr = mapping.target;
+              var match = innerRequest.match(mapping.aliasPattern);
+              if (!match) {
+                  return callback();
+              }
+              if (!mapping.onlyModule) {
+                  newRequestStr = newRequestStr.replace('*', match[1]);
+              }
+              if (newRequestStr[0] === '.') {
+                  newRequestStr = path.resolve(absoluteBaseUrl, newRequestStr);
+              }
+              var obj: Request = Object.assign({}, request, {
                 request: newRequestStr
+              });
+
+              console.log("aliased'" + innerRequest  + "': '" + mapping.alias + "' to '" + newRequestStr + "'", newRequest);
+
+              return resolver.doResolve(this.target, obj,"aliased with mapping '" + innerRequest  + "': '" + mapping.alias + "' to '" + newRequestStr + "'", createInnerCallback(function(err, result) {
+                if(arguments.length > 0) return callback(err, result);
+
+                // don't allow other aliasing or raw request
+                callback(null, null);
+              }, callback));
+
+              return callback();
             });
-
-            console.log("aliased'" + innerRequest  + "': '" + mapping.alias + "' to '" + newRequestStr + "'", newRequest);
-
-            let doResolve = resolver.doResolve(
-                this.target,
-                newRequest,
-                "aliased with mapping '" + innerRequest  + "': '" + mapping.alias + "' to '" + newRequestStr + "'",
-                createInnerCallback(
-                    function(err, result) {
-                        console.log(err, result, arguments.length > 0);
-                        if (arguments.length > 0) {
-                            return callback(err, result);
-                        }
-
-                        // don't allow other aliasing or raw request
-                        callback(null, null);
-                    },
-                    callback
-                )
-            );
-
-            return doResolve;
-        };
+        });
     }
 }

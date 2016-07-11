@@ -1,8 +1,9 @@
 import * as webpack from 'webpack';
-import {PathsPlugin, LoaderConfig} from '../utilities/ts-path-mappings-webpack-plugin';
+import {LoaderConfig} from '../utilities/ts-path-mappings-webpack-plugin';
 
 const path = require('path');
 const ForkCheckerPlugin = require('awesome-typescript-loader').ForkCheckerPlugin;
+const PathsPlugin = require('awesome-typescript-loader').TsConfigPathsPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
